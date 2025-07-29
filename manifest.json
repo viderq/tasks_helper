@@ -1,0 +1,39 @@
+{
+  "name": "Aviation Briefings",
+  "short_name": "Наряд",
+  "description": "Помощник по оптимизации работы с нарядами.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#003366",
+  "theme_color": "#003366",
+
+  "icons": [
+    {
+      "src": "64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
