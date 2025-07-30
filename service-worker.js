@@ -34,7 +34,7 @@ self.addEventListener('install', event => {
     try {
       const response = await fetch(url, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      await cache.put(normalize(new Request(url)), response);
+      await cache.put(normalize(new Request(url)), response.clone());
     } catch (err) {
       console.error(`❌ Failed to precache ${url}:`, err);
     }
