@@ -1,5 +1,5 @@
 /*  Service Worker для “Speech Test”  */
-const CACHE = 'tasks-cache-v0.1';
+const CACHE = 'tasks-cache-v0.2';
 
 /* Файлы, которые нужны оф-лайн сразу после установки */
 const PRECACHE = [
