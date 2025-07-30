@@ -1116,18 +1116,20 @@ body {
     align-items: center;
     padding: 1rem;
     margin: 1rem 0;
-    background: #f9f9f9;
-    border: 1px solid #e0e0e0;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 0.875rem;
     width: 100%;
     box-sizing: border-box;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fade 0.3s ease-in-out;
+    animation-fill-mode: forwards;
 }
 
 .flight-block:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .flight-info {
@@ -1135,57 +1137,61 @@ body {
     flex-direction: column;
     gap: 0.5rem;
     flex-grow: 1;
+    min-width: 0;
 }
 
 .flight-info span {
-    color: #333;
+    color: var(--text);
     font-size: 0.95rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    line-height: 1.4;
+}
+
+.flight-info span::before {
+    content: "";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    margin-right: 0.5rem;
+    color: var(--icon-color);
 }
 
 .flight-info span:first-child::before {
     content: "\f073"; /* FontAwesome calendar icon */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    margin-right: 0.5rem;
 }
 
 .flight-info span:nth-child(2)::before {
     content: "\f072"; /* FontAwesome plane icon */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    margin-right: 0.5rem;
 }
 
 .flight-info span:nth-child(3)::before {
     content: "\f6c0"; /* FontAwesome plane type icon */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    margin-right: 0.5rem;
 }
 
 .flight-info span:nth-child(4)::before {
     content: "\f017"; /* FontAwesome clock icon */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    margin-right: 0.5rem;
 }
 
 .remove-flight-btn {
     background: none;
     border: none;
-    color: #ff4444;
+    color: var(--warning);
     font-size: 1.2rem;
     cursor: pointer;
     padding: 0.25rem;
     transition: color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
 }
 
 .remove-flight-btn:hover {
-    color: #cc0000;
+    color: var(--warning);
     transform: scale(1.2);
+    background: rgba(249, 115, 22, 0.1); /* Легкий фон при наведении */
 }
 
 @media (max-width: 480px) {
