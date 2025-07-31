@@ -9,11 +9,269 @@ if ('serviceWorker' in navigator) {
 const airports = {
     "MIR": "DTMB/MIR - MONASTIR/HABIB BOU",
     "NBE": "DTNH/NBE - ENFIDHA / HAMMAMET",
-    "KHN": "ZSCN/KHN - NANGHANG CHANGBEI IN",
-    "KHV": "UHSS/KHV - Хабаровск (Новый)",
-    "KJA": "UNKL/KJA - Красноярск (Емельяново)",
-    "SVO": "UUEE/SVO - Москва (Шереметьево)",
-    "KGD": "UMKK/KGD - Калининград (Храброво)"
+    "TUN": "DTTA/TUN - TUNIS/CARTHAGE",
+    "TLL": "EETN/TLL - TALLINN/LENNART ME",
+    "HEL": "EFHK/HEL - HELSINKI/VANTAA",
+    "ARN": "ESSA/ARN - STOCKHOLM/ARLANDA",
+    "RIX": "EVRA/RIX - RIGA",
+    "VNO": "EYVI/VNO - VILNIUS INTL",
+    "CAI": "HECA/CAI - CAIRO INTL",
+    "HRG": "HEGN/HRG - HURGHADA INTL",
+    "LXR": "HELX/LXR - LUXOR INTL",
+    "SSH": "HESH/SSH - SHARM EL SHEIKH IN",
+    "LCA": "LCLK/LCA - LARNAKA INTL",
+    "PFO": "LCPH/PFO - PAFOS INTL",
+    "TLV": "LLBG/TLV - TEL AVIV/BEN GURIO",
+    "ESB": "LTAC/ESB - ANKARA/ESENBOGA IN",
+    "ADA": "LTAF/ADA - ADANA",
+    "AYT": "LTAI/AYT - ANTALYA INTL",
+    "ISL": "LTBA/ISL - ISTANBUL/ATATURK I",
+    "ADB": "LTBJ/ADB - IZMIR/ADNAN MENDER",
+    "DLM": "LTBS/DLM - MUGLA/DALAMAN",
+    "BJV": "LTFE/BJV - MILAS/BODRUM",
+    "GZP": "LTFG/GZP - GAZIPASA/ALANYA",
+    "SAW": "LTFJ/SAW - ISTANBUL/SABIHA GO",
+    "IST": "LTFM/IST - ISTANBUL AIRPORT",
+    "KBL": "OAKB/KBL - HAMID KARZAI INTL/",
+    "BAH": "OBBI/BAH - BAHRAIN INTL",
+    "BUZ": "OIBB/BUZ - BUSHEHR",
+    "IFN": "OIFM/IFN - ESFAHAN/SHAHID BEH",
+    "IKA": "OIIE/IKA - TEHRAN/IMAM KHOMAI",
+    "THR": "OIII/THR - TEHRAN/MEHRABAD IN",
+    "SYZ": "OISS/SYZ - SHIRAZ/SHAHID DAST",
+    "AMM": "OJAI/AMM - AMMAN/QUEEN ALIA I",
+    "ADJ": "OJAM/ADJ - AMMAN MARKA INTL",
+    "AQJ": "OJAQ/AQJ - AQABA/KING HUSSEIN",
+    "BEY": "OLBA/BEY - BEIRUT/RAFIC HARIR",
+    "AUH": "OMAA/AUH - ABU DHABI INTL",
+    "AAN": "OMAL/AAN - AL AIN INTL",
+    "DXB": "OMDB/DXB - DUBAI INTL",
+    "DWC": "OMDW/DWC - DUBAI/AL MAKTOUM I",
+    "FJR": "OMFJ/FJR - FUJAIRAH INTL",
+    "RKT": "OMRK/RKT - RAS AL KHAIMAH INT",
+    "SHJ": "OMSJ/SHJ - SHARJAH INTL",
+    "MCT": "OOMS/MCT - MUSCAT INTL",
+    "KHI": "OPKC/KHI - KARACHI/JINNAH INT",
+    "LHE": "OPLA/LHE - LAHORE/ALLAMA IQBA",
+    "PEW": "OPPS/PEW - BACHA KHAN INTL",
+    "BGW": "ORBI/BGW - BAGHDAD INTL",
+    "BSR": "ORMM/BSR - BASRAH INTL",
+    "DIA": "OTBD/DIA - DOHA INTL",
+    "DOH": "OTHH/DOH - DOHA/HAMAD INTL",
+    "CJU": "RKPC/CJU - JEJU INTL",
+    "PUS": "RKPK/PUS - BUSAN/GIMHAE INTL",
+    "ICN": "RKSI/ICN - SEOUL/INCHEON INTL",
+    "GMP": "RKSS/GMP - SEOUL/GIMPO INTL",
+    "ALA": "UAAA/ALA - ALMATY",
+    "NQZ": "UACC/NQZ - NUR-SULTAN/N. NAZA",
+    "CIT": "UAII/CIT - SHYMKENT",
+    "HSA": "UAIT/HSA - TURKISTAN",
+    "KGF": "UAKK/KGF - KARAGANDA",
+    "BXY": "UAOL/BXY - KRAINIY",
+    "KZO": "UAOO/KZO - KYZYLORDA",
+    "URA": "UARR/URA - URALSK",
+    "SCO": "UATE/SCO - AKTAU",
+    "GUW": "UATG/GUW - ATYRAU",
+    "AKX": "UATT/AKX - AKTOBE/AKTOBE",
+    "KSN": "UAUU/KSN - KOSTANAY",
+    "GYD": "UBBB/GYD - BAKU/HEYDAR ALIYEV",
+    "GNJ": "UBBG/GNJ - GANJA",
+    "IKU": "UCFL/IKU - ISSYK-KUL",
+    "FRU": "UCFM/FRU - BISHKEK/MANAS",
+    "OSS": "UCFO/OSS - OSH",
+    "LWN": "UDSG/LWN - GYUMRI/SHIRAK",
+    "EVN": "UDYZ/EVN - YEREVAN/ZVARTNOTS",
+    "TLK": "UECT/TLK - TALAKAN",
+    "YKS": "UEEE/YKS - YAKUTSK",
+    "NER": "UELL/NER - NERYUNGRI CHULMAN",
+    "PYJ": "UERP/PYJ - POLYARNY",
+    "MJZ": "UERR/MJZ - MIRNY",
+    "BUS": "UGSB/BUS - BATUMI",
+    "TBS": "UGTB/TBS - TBILISI/TBILISI",
+    "BQS": "UHBB/BQS - BLAGOVESCHENSK/IGN",
+    "KHV": "UHHH/KHV - KHABAROVSK NOVY",
+    "XKD": "UHKD/XKD - KOMSOMOLSK NA AMUR",
+    "DYR": "UHMA/DYR - ANADYR/UGOLNY",
+    "GDX": "UHMM/GDX - MAGADAN/SOKOL",
+    "PKC": "UHPP/PKC - PETROPAVLOVSK-KAMC",
+    "UUS": "UHSS/UUS - YUZHNO-SAKHALINSK",
+    "VVO": "UHWW/VVO - VLADIVOSTOK",
+    "HTA": "UIAA/HTA - CHITA",
+    "BTK": "UIBB/BTK - BRATSK",
+    "IKT": "UIII/IKT - IRKUTSK",
+    "UUD": "UIUU/UUD - ULAN-UDE/MUKHINO",
+    "ARH": "ULAA/ARH - ARCHANGELSK",
+    "NNM": "ULAM/NNM - NARYAN MAR",
+    "LED": "ULLI/LED - SANKT-PETERBURG/PU",
+    "KVK": "ULMK/KVK - APATITY/KHIBINY",
+    "MMK": "ULMM/MMK - MURMANSK",
+    "PKV": "ULOO/PKV - PSKOV",
+    "PES": "ULPB/PES - PETROZAVODSK",
+    "CEE": "ULWC/CEE - CHEREPOVETS",
+    "KGD": "UMKK/KGD - KALININGRAD",
+    "MSQ": "UMMS/MSQ - MINSK-2",
+    "ABA": "UNAA/ABA - ABAKAN",
+    "BAX": "UNBB/BAX - BARNAUL/MIKHAYLOVK",
+    "RGK": "UNBG/RGK - GORNO-ALTAISK",
+    "KEJ": "UNEE/KEJ - KEMEROVO/ALEXEY LE",
+    "KJA": "UNKL/KJA - KRASNOYARSK",
+    "OVB": "UNNT/OVB - NOVOSIBIRSK/TOLMAC",
+    "OMS": "UNOO/OMS - OMSK TSENTRALNY",
+    "TOF": "UNTT/TOF - TOMSK",
+    "NOZ": "UNWW/NOZ - NOVOKUZNETSK",
+    "HTG": "UOHH/HTG - KHATANGA",
+    "IAA": "UOII/IAA - IGARKA",
+    "NSK": "UOOO/NSK - NORILSK ALYKEL",
+    "SIP": "URFF/SIP - SIMFEROPOL INTL",
+    "AAQ": "URKA/AAQ - ANAPA",
+    "GDZ": "URKG/GDZ - GELENDZHIK",
+    "KRR": "URKK/KRR - KRASNODAR PASHKOVS",
+    "GRV": "URMG/GRV - GROZNY/SEVERNY",
+    "MCX": "URML/MCX - MAKHACHKALA/UYTASH",
+    "MRV": "URMM/MRV - MINERALNYYE VODY",
+    "NAL": "URMN/NAL - NALCHIK",
+    "OGZ": "URMO/OGZ - VLADIKAVKAZ",
+    "IGT": "URMS/IGT - MAGAS",
+    "STW": "URMT/STW - STAVROPOL SHPAKOVS",
+    "ROV": "URRP/ROV - ROSTOV NA DONU/PLA",
+    "AER": "URSS/AER - SOCHI",
+    "ASF": "URWA/ASF - ASTRAKHAN",
+    "ESL": "URWI/ESL - ELISTA",
+    "VOG": "URWW/VOG - VOLGOGRAD",
+    "CEK": "USCC/CEK - CHELYABINSK BALAND",
+    "MQF": "USCM/MQF - MAGNITOGORSK",
+    "SBT": "USDA/SBT - SABETTA",
+    "SLY": "USDD/SLY - SALEKHARD",
+    "HMA": "USHH/HMA - KHANTY-MANSIYSK/KH",
+    "EYK": "USHQ/EYK - BELOYARSKIY",
+    "IJK": "USII/IJK - IZHEVSK",
+    "KVX": "USKK/KVX - KIROV",
+    "NYM": "USMM/NYM - NADYM",
+    "YMB": "USMQ/YMB - YAMBURG",
+    "NUX": "USMU/NUX - NOVY URENGOY",
+    "NJC": "USNN/NJC - NIZHNEVARTOVSK",
+    "PEE": "USPP/PEE - PERM/BOLSHOE SAVIN",
+    "KGP": "USRK/KGP - KOGALYM",
+    "NOJ": "USRO/NOJ - NOYABRSK",
+    "SGC": "USRR/SGC - SURGUT",
+    "SVX": "USSS/SVX - YEKATERINBURG/KOLT",
+    "RMZ": "USTJ/RMZ - TOBOLSK/REMEZOV",
+    "TJM": "USTR/TJM - TYUMEN/ROSHCHINO",
+    "KRO": "USUU/KRO - KURGAN",
+    "ASB": "UTAA/ASB - ASHGABAT",
+    "KRW": "UTAK/KRW - TURKMENBASHI",
+    "DYU": "UTDD/DYU - DUSHANBE",
+    "TJU": "UTDK/TJU - KULOB",
+    "LBD": "UTDL/LBD - KHUJAND",
+    "AZN": "UTFA/AZN - ANDIZHAN",
+    "FEG": "UTFF/FEG - FERGANA",
+    "NMA": "UTFN/NMA - NAMANGAN",
+    "NCU": "UTNN/NCU - NUKUS",
+    "UGC": "UTNU/UGC - URGENCH",
+    "NVI": "UTSA/NVI - NAVOI",
+    "BHK": "UTSB/BHK - BUKHARA",
+    "KSQ": "UTSK/KSQ - KARSHI",
+    "SKD": "UTSS/SKD - SAMARKAND",
+    "TAS": "UTTT/TAS - TASHKENT INTL/ISLA",
+    "BZK": "UUBP/BZK - BRYANSK",
+    "ZIA": "UUBW/ZIA - RAMENSKOYE",
+    "DME": "UUDD/DME - MOSCOW/DOMODEDOVO",
+    "IAR": "UUDL/IAR - YAROSLAVL / TUNOSH",
+    "SVO": "UUEE/SVO - MOSCOW/SHEREMETYEV",
+    "EGO": "UUOB/EGO - BELGOROD",
+    "URS": "UUOK/URS - KURSK VOSTOCHNY",
+    "LPK": "UUOL/LPK - LIPETSK",
+    "VOZ": "UUOO/VOZ - VORONEZH",
+    "VKO": "UUWW/VKO - MOSCOW/VNUKOVO",
+    "UCT": "UUYH/UCT - UKHTA",
+    "USK": "UUYS/USK - USINSK",
+    "VKT": "UUYW/VKT - VORKUTA",
+    "SCW": "UUYY/SCW - SYKTYVKAR",
+    "GOJ": "UWGG/GOJ - NIZHNY NOVGOROD/ST",
+    "KZN": "UWKD/KZN - KAZAN",
+    "NBC": "UWKE/NBC - NIZHNEKAMSK/BEGISH",
+    "JOK": "UWKJ/JOK - YOSHKAR-OLA",
+    "CSY": "UWKS/CSY - CHEBOKSARY",
+    "ULV": "UWLL/ULV - ULYANOVSK-BARATAEW",
+    "ULY": "UWLW/ULY - ULYANOVSK/VOSTOCHN",
+    "REN": "UWOO/REN - ORENBURG",
+    "OSW": "UWOR/OSW - ORSK",
+    "PEZ": "UWPP/PEZ - PENZA",
+    "SKX": "UWPS/SKX - SARANSK",
+    "GSV": "UWSG/GSV - SARATOV/GAGARIN",
+    "UFA": "UWUU/UFA - UFA",
+    "KUF": "UWWW/KUF - SAMARA/KURUMOCH",
+    "AMD": "VAAH/AMD - AHMEDABAD/VALLABH",
+    "BOM": "VABB/BOM - MUMBAI/CHHATRAPATI",
+    "CMB": "VCBI/CMB - KATUNAYAKE/BAN. IN",
+    "HRI": "VCRI/HRI - MATTALA RAJAPAKSA",
+    "PNH": "VDPP/PNH - PHNOM PENH",
+    "CCU": "VECC/CCU - KOLKATA INTL",
+    "DAC": "VGHS/DAC - DHAKA/HAZRAT SHAHJ",
+    "HKG": "VHHH/HKG - HONG KONG INTL",
+    "ATQ": "VIAR/ATQ - AMRITSAR/SRI GURU",
+    "DEL": "VIDP/DEL - DELHI/INDIRA GANDH",
+    "LKO": "VILK/LKO - CHAUDHARY CHARAN S",
+    "VTE": "VLVT/VTE - VIENTIANE WATTAY",
+    "MFM": "VMMC/MFM - MACAO INTL",
+    "BLR": "VOBL/BLR - BENGALURU/KEMPEGOW",
+    "GOI": "VOGO/GOI - GOA/DABOLIM NAVY",
+    "HYD": "VOHS/HYD - HYDERABAD/RAJIV GA",
+    "MAA": "VOMM/MAA - CHENNAI INTL",
+    "TRV": "VOTV/TRV - THIRUVANANTHAPURAM",
+    "MLE": "VRMM/MLE - MALE/VELANA INTL",
+    "BKK": "VTBS/BKK - BANGKOK/SUVARNABHU",
+    "UTP": "VTBU/UTP - RAYONG/U-TAPAO PAT",
+    "HKT": "VTSP/HKT - PHUKET INTL",
+    "CXR": "VVCR/CXR - KHANH HOA/CAM RANH",
+    "DAD": "VVDN/DAD - DANANG INTL",
+    "HAN": "VVNB/HAN - HANOI/NOIBAI INTL",
+    "SGN": "VVTS/SGN - HO CHI MINH/TAN SO",
+    "MDL": "VYMD/MDL - MANDALAY INTL",
+    "RGN": "VYYY/RGN - YANGON INTL",
+    "KUL": "WMKK/KUL - KUALA LUMPUR/SEPAN",
+    "SIN": "WSSS/SIN - SINGAPORE/CHANGI",
+    "PEK": "ZBAA/PEK - BEIJING/CAPITAL",
+    "PKX": "ZBAD/PKX - BEIJING/DAXING",
+    "HET": "ZBHH/HET - HOHHOT/BAITA",
+    "SJW": "ZBSJ/SJW - SHIJIAZHUANG/ZHENG",
+    "TSN": "ZBTJ/TSN - TIANJIN/BINHAI INT",
+    "TYN": "ZBYN/TYN - TAIYUAN/WUSU",
+    "CAN": "ZGGG/CAN - GUANGZHOU/BAIYUN",
+    "CSX": "ZGHA/CSX - CHANGSHA/HUANGHUA",
+    "SZX": "ZGSZ/SZX - SHENZHEN/BAOAN",
+    "CGO": "ZHCC/CGO - ZHENGZHOU/XINZHENG",
+    "WUH": "ZHHH/WUH - WUHAN/TIANHE",
+    "HAK": "ZJHK/HAK - HAIKOU/MEILAN",
+    "SYX": "ZJSY/SYX - SANYA/PHOENIX INTL",
+    "LHW": "ZLLL/LHW - LANZHOU/ZHONGCHUAN",
+    "XIY": "ZLXY/XIY - XI AN XIANYANG",
+    "UBN": "ZMCK/UBN - ULAANBAATAR/CHINGG",
+    "XMN": "ZSAM/XMN - XIAMEN/GAOQI",
+    "HGH": "ZSHC/HGH - HANGZHOU/XIAOSHAN",
+    "TNA": "ZSJN/TNA - JINAN/YAOQIANG",
+    "NKG": "ZSNJ/NKG - NANJING/LUKOU",
+    "HFE": "ZSOF/HFE - HEFEI/XINQIAO",
+    "PVG": "ZSPD/PVG - SHANGHAI/PUDONG",
+    "TAO": "ZSQD/TAO - QINGDAO/JIAODONG",
+    "SHA": "ZSSS/SHA - SHANGHAI/HONGQIAO",
+    "CKG": "ZUCK/CKG - CHONGQING/JIANGBEI",
+    "CTU": "ZUUU/CTU - CHENGDU/SHUANGLIU",
+    "URC": "ZWWW/URC - URUMQI/DIWOPU",
+    "DLC": "ZYTL/DLC - DALIAN/ZHOUSHUIZI",
+    "SHE": "ZYTX/SHE - SHENYANG/TAOXIAN",
+    "GOX": "VOGA/GOX - MOPA",
+    "KLF": "UUBC/KLF - KALUGA",
+    "CGQ": "ZYCC/CGQ - CHANGCHUN LONGJIA",
+    "TFU ": "ZUTF/TFU  - TIANFU ",
+    "KYZ": "UNKY/KYZ - KYZYL",
+    "BAT": "UMBB/BAT - BREST",
+    "BVJ": "USDB/BVJ - BOVANENKOVO",
+    "DJE": "DTTJ/DJE - DJERBA",
+    "JAI": "VIJP/JAI - JAIPUR INTL",
+    "NIL": "UIIR/NIL - VOSTOCHNY",
+    "UKK": "UASK/UKK - UST-KAMENOGORSK",
+    "KHN": "ZSCN/KHN - NANGHANG CHANGBEI IN"
 };
 
 const CACHE_DURATION = 20 * 60 * 1000; // 20 минут
@@ -194,45 +452,81 @@ async function handleFlightInfoUpdate(date, flightNumberFull, departureAirport, 
 }
 
 function createFlightBlock(departureDateTime, depIata, arrIata, aircraftType, flightNumberFull, date) {
-    const days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
-    const dayName = days[departureDateTime.getDay()];
-    const formattedDate = departureDateTime.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const daysShort = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+    const dayName = daysShort[departureDateTime.getDay()];
+    const formattedDate = departureDateTime.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
     const departureTime = departureDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const checkInTime = new Date(departureDateTime.getTime() - 2 * 60 * 60 * 1000); // За 2 часа до вылета
-    const checkInTimeStr = checkInTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const arrivalDateTime = new Date(departureDateTime.getTime() + 5 * 60 * 60 * 1000 + 25 * 60 * 1000); // 5ч 25м
+    const arrivalTime = arrivalDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const arrFormattedDate = arrivalDateTime.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+    const arrDayName = daysShort[arrivalDateTime.getDay()];
+
+    const duration = '5 ч 55 мин'; // По картинке
+
+    const depCity = airports[depIata]?.split(' - ')[1]?.split('/')[0] || depIata;
+    const arrCity = airports[arrIata]?.split(' - ')[1]?.split('/')[0] || arrIata;
 
     const flightBlock = document.createElement('div');
     flightBlock.className = 'flight-block';
     flightBlock.innerHTML = `
-        <div class="flight-info">
-            <span>${dayName}, ${formattedDate} ${departureTime}</span>
-            <span>${(airports[depIata]?.split(' - ')[1] || depIata)} → ${(airports[arrIata]?.split(' - ')[1] || arrIata)}</span>
-            <span>Тип ВС: ${aircraftType}</span>
-            <span>Явка: ${checkInTimeStr}</span>
+        <div class="flight-card" data-flight-number="${flightNumberFull}" data-date="${date}">
+            <div class="flight-column">
+                <div class="flight-date-row">
+                    <span>${formattedDate}, ${dayName}</span>
+                    <span class="iata-code">${depIata}</span>
+                </div>
+                <div class="flight-time-row">
+                    <span class="flight-time">${departureTime}</span>
+                    <span class="city">${depCity}</span>
+                </div>
+            </div>
+
+            <div class="flight-icon">
+                ✈
+            </div>
+
+            <div class="flight-column">
+                <div class="flight-date-row">
+                    <span>${arrFormattedDate}, ${arrDayName}</span>
+                    <span class="iata-code">${arrIata}</span>
+                </div>
+                <div class="flight-time-row">
+                    <span class="flight-time">${arrivalTime}</span>
+                    <span class="city">${arrCity}</span>
+                </div>
+            </div>
+
+            <div class="flight-info-row">
+                <span>${flightNumberFull}</span>
+                <span>${duration}</span>
+                <span>${aircraftType}</span>
+            </div>
         </div>
-        <button class="remove-flight-btn" aria-label="Удалить рейс"><i class="fas fa-times"></i></button>
     `;
 
     const header = document.querySelector('.header');
     header.insertAdjacentElement('afterend', flightBlock);
 
-    // Сохранение данных в localStorage
+    setTimeout(() => {
+        flightBlock.classList.add('visible');
+    }, 0);
+
     const flightData = {
         flightNumber: flightNumberFull,
         date: date,
         departureDateTime: departureDateTime.toISOString(),
         depIata: depIata,
         arrIata: arrIata,
-        aircraftType: aircraftType
+        aircraftType: aircraftType,
+        duration: duration,
+        depCity: depCity,
+        arrCity: arrCity
     };
     localStorage.setItem(`flight_${flightNumberFull}_${date}`, JSON.stringify(flightData));
 
-    // Добавление обработчика для удаления блока
-    const removeBtn = flightBlock.querySelector('.remove-flight-btn');
-    removeBtn.addEventListener('click', () => {
-        flightBlock.remove();
-        localStorage.removeItem(`flight_${flightNumberFull}_${date}`);
-    });
+    // Добавляем обработчик клика для открытия меню редактирования
+    flightBlock.addEventListener('click', () => openEditModal(flightBlock, flightData));
 }
 
 function loadExistingFlights() {
@@ -359,3 +653,115 @@ function updateTimeDisplays() {
 // Обновление раз в секунду
 setInterval(updateTimeDisplays, 1000);
 updateTimeDisplays(); // сразу при загрузке
+
+function openEditModal(flightBlock, flightData) {
+    const modal = document.createElement('div');
+    modal.className = 'edit-modal';
+    modal.innerHTML = `
+        <div class="edit-modal-content">
+            <h3>Редактирование наряда</h3>
+            <div class="input-group">
+                <input type="date" id="edit-date" value="${new Date(flightData.departureDateTime).toISOString().split('T')[0]}">
+                <div class="flight-number-wrapper">
+                    <select id="edit-flight-prefix">
+                        <option value="SU" ${flightData.flightNumber.startsWith('SU') ? 'selected' : ''}>SU</option>
+                        <option value="EVENT" ${flightData.flightNumber.startsWith('EVENT') ? 'selected' : ''}>Событие</option>
+                    </select>
+                    <input type="text" id="edit-flight-number" value="${flightData.flightNumber.replace(/^[A-Z]+/, '')}" pattern="[0-9]*" inputmode="numeric">
+                </div>
+                <input type="time" id="edit-departure-time" value="${new Date(flightData.departureDateTime).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })}">
+                <select id="edit-dep-iata">
+                    ${Object.keys(airports).map(iata => `<option value="${iata}" ${iata === flightData.depIata ? 'selected' : ''}>${iata} - ${airports[iata].split(' - ')[1]}</option>`).join('')}
+                </select>
+                <select id="edit-arr-iata">
+                    ${Object.keys(airports).map(iata => `<option value="${iata}" ${iata === flightData.arrIata ? 'selected' : ''}>${iata} - ${airports[iata].split(' - ')[1]}</option>`).join('')}
+                </select>
+                <input type="text" id="edit-duration" value="${flightData.duration}">
+                <input type="text" id="edit-aircraft-type" value="${flightData.aircraftType}">
+            </div>
+            <div class="buttons">
+                <button class="delete-btn" id="delete-edit">Удалить</button>
+                <button class="cancel-btn" id="cancel-edit">Отмена</button>
+                <button class="save-btn" id="save-edit">Сохранить</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    modal.classList.add('active');
+
+    const saveBtn = modal.querySelector('#save-edit');
+    const cancelBtn = modal.querySelector('#cancel-edit');
+    const deleteBtn = modal.querySelector('#delete-edit');
+
+    saveBtn.addEventListener('click', () => saveEdit(modal, flightBlock, flightData));
+    cancelBtn.addEventListener('click', () => modal.remove());
+    deleteBtn.addEventListener('click', () => deleteFlight(modal, flightBlock, flightData));
+}
+
+function saveEdit(modal, flightBlock, flightData) {
+    const date = new Date(document.getElementById('edit-date').value);
+    const prefix = document.getElementById('edit-flight-prefix').value;
+    const number = document.getElementById('edit-flight-number').value.trim().replace(/[^0-9]/g, '');
+    const flightNumberFull = `${prefix}${number}`.padStart(6, '0').toUpperCase();
+    const departureTime = document.getElementById('edit-departure-time').value;
+    const [hours, minutes] = departureTime.split(':').map(Number);
+    date.setHours(hours, minutes, 0, 0);
+    const depIata = document.getElementById('edit-dep-iata').value;
+    const arrIata = document.getElementById('edit-arr-iata').value;
+    const duration = document.getElementById('edit-duration').value;
+    const aircraftType = document.getElementById('edit-aircraft-type').value;
+
+    const depCity = airports[depIata]?.split(' - ')[1]?.split('/')[0] || depIata;
+    const arrCity = airports[arrIata]?.split(' - ')[1]?.split('/')[0] || arrIata;
+
+    const newFlightData = {
+        flightNumber: flightNumberFull,
+        date: date.toISOString().split('T')[0],
+        departureDateTime: date.toISOString(),
+        depIata,
+        arrIata,
+        aircraftType,
+        duration,
+        depCity,
+        arrCity
+    };
+
+    // Обновляем данные в localStorage
+    localStorage.removeItem(`flight_${flightData.flightNumber}_${flightData.date}`);
+    localStorage.setItem(`flight_${flightNumberFull}_${date.toISOString().split('T')[0]}`, JSON.stringify(newFlightData));
+
+    // Обновляем отображение
+    const flightCard = flightBlock.querySelector('.flight-card');
+    flightCard.setAttribute('data-flight-number', flightNumberFull);
+    flightCard.setAttribute('data-date', date.toISOString().split('T')[0]);
+    const daysShort = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+    const dayName = daysShort[date.getDay()];
+    const formattedDate = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+    const departureTimeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const arrivalDateTime = new Date(date.getTime() + 5 * 60 * 60 * 1000 + 25 * 60 * 1000);
+    const arrivalTime = arrivalDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const arrFormattedDate = arrivalDateTime.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+    const arrDayName = daysShort[arrivalDateTime.getDay()];
+
+    flightBlock.querySelector('.flight-date-row:first-child span:first-child').textContent = `${formattedDate}, ${dayName}`;
+    flightBlock.querySelector('.flight-date-row:first-child .iata-code').textContent = depIata;
+    flightBlock.querySelector('.flight-time-row:first-child .flight-time').textContent = departureTimeStr;
+    flightBlock.querySelector('.flight-time-row:first-child .city').textContent = depCity;
+    flightBlock.querySelector('.flight-date-row:last-child span:first-child').textContent = `${arrFormattedDate}, ${arrDayName}`;
+    flightBlock.querySelector('.flight-date-row:last-child .iata-code').textContent = arrIata;
+    flightBlock.querySelector('.flight-time-row:last-child .flight-time').textContent = arrivalTime;
+    flightBlock.querySelector('.flight-time-row:last-child .city').textContent = arrCity;
+    flightBlock.querySelector('.flight-info-row span:first-child').textContent = flightNumberFull;
+    flightBlock.querySelector('.flight-info-row span:nth-child(2)').textContent = duration;
+    flightBlock.querySelector('.flight-info-row span:nth-child(3)').textContent = aircraftType;
+
+    modal.remove();
+}
+
+function deleteFlight(modal, flightBlock, flightData) {
+    if (confirm('Вы уверены, что хотите удалить этот наряд?')) {
+        localStorage.removeItem(`flight_${flightData.flightNumber}_${flightData.date}`);
+        flightBlock.remove();
+        modal.remove();
+    }
+}
