@@ -293,7 +293,7 @@ function fetchFlightInfo(flightNumber, date) {
                 return response.json();
             })
             .then(data => {
-                console.log("Сырые данные от API:", data); // Вывод сырых данных
+                console.log("Сырые данные от API:", data);
                 if (!data || !data.data || !data.data.routes || data.error) {
                     console.error("Недостаточно данных или ошибка API:", data?.error || "Неизвестная ошибка");
                     resolve(null);
@@ -348,8 +348,9 @@ function displayFlightInfo(flightData, departureAirport, arrivalAirport, date) {
         return null;
     }
 
-    const departureTimeStr = leg.departure.times.estimatedBlockOff?.localTime || leg.departure.times.scheduledDeparture?.localTime;
+    const departureTimeStr = leg.departure.times.scheduledDeparture?.localTime || leg.departure.times.estimatedBlockOff?.localTime;
     const aircraftType = leg.equipment?.aircraft?.scheduled?.type || 'N/A';
+    const flyingTime = flight.flyingTime || 'N/A'; // Извлекаем flyingTime
     const flightDate = new Date(date);
     let departureDateTime;
 
@@ -390,7 +391,7 @@ function displayFlightInfo(flightData, departureAirport, arrivalAirport, date) {
 
     const flightTimeDisplay = document.getElementById("flight-time-display");
     const spinner = document.getElementById("flight-time-spinner");
-    if (spinner) spinner.classList.add("hidden"); // Прячем спinнер после загрузки
+    if (spinner) spinner.classList.add("hidden"); // Прячем спиннер после загрузки
     if (flightTimeDisplay) {
         flightTimeDisplay.textContent = `${departureDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`; // Только время
     }
@@ -404,7 +405,8 @@ function displayFlightInfo(flightData, departureAirport, arrivalAirport, date) {
     console.log("Аэропорт вылета:", depIata);
     console.log("Аэропорт прилета:", arrIata);
     console.log("Тип самолета:", aircraftType);
-    return { departureDateTime, depIata, arrIata, aircraftType };
+    console.log("Время в полете:", flyingTime);
+    return { departureDateTime, depIata, arrIata, aircraftType, flyingTime };
 }
 
 async function handleFlightInfoUpdate(date, flightNumberFull, departureAirport, arrivalAirport) {
@@ -451,18 +453,19 @@ async function handleFlightInfoUpdate(date, flightNumberFull, departureAirport, 
     }
 }
 
-function createFlightBlock(departureDateTime, depIata, arrIata, aircraftType, flightNumberFull, date) {
+function createFlightBlock(departureDateTime, depIata, arrIata, aircraftType, flightNumberFull, date, flyingTime) {
     const daysShort = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
     const dayName = daysShort[departureDateTime.getDay()];
     const formattedDate = departureDateTime.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
     const departureTime = departureDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    const arrivalDateTime = new Date(departureDateTime.getTime() + 5 * 60 * 60 * 1000 + 25 * 60 * 1000); // 5ч 25м
+    const arrivalDateTime = new Date(departureDateTime.getTime());
+    // Используем значение по умолчанию, если flyingTime отсутствует или некорректно
+    const [hours = 0, minutes = 0, seconds = 0] = (flyingTime && flyingTime.split(':').map(Number)) || [0, 0, 0];
+    arrivalDateTime.setHours(arrivalDateTime.getHours() + hours, arrivalDateTime.getMinutes() + minutes, arrivalDateTime.getSeconds() + seconds);
     const arrivalTime = arrivalDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const arrFormattedDate = arrivalDateTime.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
     const arrDayName = daysShort[arrivalDateTime.getDay()];
-
-    const duration = '5 ч 55 мин'; // По картинке
 
     const depCity = airports[depIata]?.split(' - ')[1]?.split('/')[0] || depIata;
     const arrCity = airports[arrIata]?.split(' - ')[1]?.split('/')[0] || arrIata;
@@ -499,7 +502,7 @@ function createFlightBlock(departureDateTime, depIata, arrIata, aircraftType, fl
 
             <div class="flight-info-row">
                 <span>${flightNumberFull}</span>
-                <span>${duration}</span>
+                <span>${flyingTime || 'N/A'}</span> <!-- Значение по умолчанию, если flyingTime отсутствует -->
                 <span>${aircraftType}</span>
             </div>
         </div>
@@ -519,7 +522,7 @@ function createFlightBlock(departureDateTime, depIata, arrIata, aircraftType, fl
         depIata: depIata,
         arrIata: arrIata,
         aircraftType: aircraftType,
-        duration: duration,
+        flyingTime: flyingTime || 'N/A', // Значение по умолчанию, если отсутствует
         depCity: depCity,
         arrCity: arrCity
     };
@@ -536,7 +539,9 @@ function loadExistingFlights() {
             const flightData = JSON.parse(localStorage.getItem(key));
             const [_, flightNumberFull, date] = key.split('_');
             const departureDateTime = new Date(flightData.departureDateTime);
-            createFlightBlock(departureDateTime, flightData.depIata, flightData.arrIata, flightData.aircraftType, flightNumberFull, date);
+            // Используем flyingTime из flightData, с запасным значением 'N/A', если отсутствует
+            const flyingTime = flightData.flyingTime || 'N/A';
+            createFlightBlock(departureDateTime, flightData.depIata, flightData.arrIata, flightData.aircraftType, flightNumberFull, date, flyingTime);
         }
     });
 }
@@ -625,7 +630,7 @@ createDutyBtn.addEventListener('click', () => {
     );
 
     if (flightData) {
-        createFlightBlock(flightData.departureDateTime, flightData.depIata, flightData.arrIata, flightData.aircraftType, flightNumberFull, date);
+        createFlightBlock(flightData.departureDateTime, flightData.depIata, flightData.arrIata, flightData.aircraftType, flightNumberFull, date, flightData.flyingTime);
         document.getElementById('input-group-modal').classList.remove('active');
     } else {
         console.log("Данные рейса не найдены для создания наряда");
@@ -676,7 +681,7 @@ function openEditModal(flightBlock, flightData) {
                 <select id="edit-arr-iata">
                     ${Object.keys(airports).map(iata => `<option value="${iata}" ${iata === flightData.arrIata ? 'selected' : ''}>${iata} - ${airports[iata].split(' - ')[1]}</option>`).join('')}
                 </select>
-                <input type="text" id="edit-duration" value="${flightData.duration}">
+                <input type="text" id="edit-flying-time" value="${flightData.flyingTime}"> <!-- Поле для редактирования flyingTime -->
                 <input type="text" id="edit-aircraft-type" value="${flightData.aircraftType}">
             </div>
             <div class="buttons">
@@ -708,7 +713,7 @@ function saveEdit(modal, flightBlock, flightData) {
     date.setHours(hours, minutes, 0, 0);
     const depIata = document.getElementById('edit-dep-iata').value;
     const arrIata = document.getElementById('edit-arr-iata').value;
-    const duration = document.getElementById('edit-duration').value;
+    const flyingTime = document.getElementById('edit-flying-time').value; // Получаем обновленное flyingTime
     const aircraftType = document.getElementById('edit-aircraft-type').value;
 
     const depCity = airports[depIata]?.split(' - ')[1]?.split('/')[0] || depIata;
@@ -721,7 +726,7 @@ function saveEdit(modal, flightBlock, flightData) {
         depIata,
         arrIata,
         aircraftType,
-        duration,
+        flyingTime, // Сохраняем flyingTime
         depCity,
         arrCity
     };
@@ -738,7 +743,9 @@ function saveEdit(modal, flightBlock, flightData) {
     const dayName = daysShort[date.getDay()];
     const formattedDate = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
     const departureTimeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const arrivalDateTime = new Date(date.getTime() + 5 * 60 * 60 * 1000 + 25 * 60 * 1000);
+    const arrivalDateTime = new Date(date.getTime());
+    const [flyHours, flyMinutes] = flyingTime.split(':').map(Number);
+    arrivalDateTime.setHours(arrivalDateTime.getHours() + flyHours, arrivalDateTime.getMinutes() + flyMinutes, 0);
     const arrivalTime = arrivalDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const arrFormattedDate = arrivalDateTime.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
     const arrDayName = daysShort[arrivalDateTime.getDay()];
@@ -752,7 +759,7 @@ function saveEdit(modal, flightBlock, flightData) {
     flightBlock.querySelector('.flight-time-row:last-child .flight-time').textContent = arrivalTime;
     flightBlock.querySelector('.flight-time-row:last-child .city').textContent = arrCity;
     flightBlock.querySelector('.flight-info-row span:first-child').textContent = flightNumberFull;
-    flightBlock.querySelector('.flight-info-row span:nth-child(2)').textContent = duration;
+    flightBlock.querySelector('.flight-info-row span:nth-child(2)').textContent = flyingTime; // Обновляем flyingTime
     flightBlock.querySelector('.flight-info-row span:nth-child(3)').textContent = aircraftType;
 
     modal.remove();
