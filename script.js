@@ -206,7 +206,7 @@ function createFlightBlock(departureDateTime, depIata, arrIata, aircraftType, fl
     flightBlock.innerHTML = `
         <div class="flight-info">
             <span>${dayName}, ${formattedDate} ${departureTime}</span>
-            <span>${airports[depIata].split(' - ')[1] || depIata} → ${airports[arrIata].split(' - ')[1] || arrIata}</span>
+            <span>${(airports[depIata]?.split(' - ')[1] || depIata)} → ${(airports[arrIata]?.split(' - ')[1] || arrIata)}</span>
             <span>Тип ВС: ${aircraftType}</span>
             <span>Явка: ${checkInTimeStr}</span>
         </div>
