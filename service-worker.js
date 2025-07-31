@@ -1,10 +1,11 @@
 /*  Service Worker для “Speech Test”  */
-const CACHE = 'tasks-cache-v0.2';
+const CACHE = 'tasks-cache-v0.3';
 
 /* Файлы, которые нужны оф-лайн сразу после установки */
 const PRECACHE = [
   './index.html',
   './manifest.json'
+  './styles.css'
 ];
 
 /* ——— helper: нормализуем ключи ——— */
