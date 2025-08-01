@@ -16,27 +16,43 @@ let currentDutyGroup = null;
 
 function fetchFlightInfo(flightNumber, date) {
   return new Promise((resolve, reject) => {
-    const proxyUrl = `https://cocsr.na4u.ru/main.php?flightNumber=${encodeURIComponent(flightNumber)}&date=${encodeURIComponent(date)}`;
-    fetch(proxyUrl)
-      .then(response => {
-        if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
-        return response.json();
-      })
-      .then(data => {
-        if (!data || !data.data || !data.data.routes || data.error) {
-          console.error("Недостаточно данных или ошибка API:", data?.error || "Неизвестная ошибка");
-          resolve(null);
-        } else {
-          const cacheKey = `flightData_${flightNumber}_${date}`;
-          const cacheData = { data, timestamp: Date.now() };
-          localStorage.setItem(cacheKey, JSON.stringify(cacheData));
-          resolve(data);
-        }
-      })
-      .catch(error => {
-        console.error("Ошибка при запросе:", error);
+    // Явное формирование URL с проверкой параметров
+    if (!flightNumber || !date) {
+      console.error("Параметры flightNumber и date обязательны");
+      resolve(null);
+      return;
+    }
+    const encodedFlightNumber = encodeURIComponent(flightNumber);
+    const encodedDate = encodeURIComponent(date);
+    const proxyUrl = `https://cocsr.na4u.ru/main.php?flightNumber=${encodedFlightNumber}&date=${encodedDate}`;
+    console.log("Отправляемый URL:", proxyUrl); // Для отладки
+
+    fetch(proxyUrl, {
+      method: 'GET', // Явно указываем метод
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
+    .then(response => {
+      if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      if (!data || !data.data || !data.data.routes || data.error) {
+        console.error("Недостаточно данных или ошибка API:", data?.error || "Неизвестная ошибка");
         resolve(null);
-      });
+      } else {
+        const cacheKey = `flightData_${flightNumber}_${date}`;
+        const cacheData = { data, timestamp: Date.now() };
+        localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+        resolve(data);
+      }
+    })
+    .catch(error => {
+      console.error("Ошибка при запросе:", error);
+      resolve(null);
+    });
   });
 }
 
