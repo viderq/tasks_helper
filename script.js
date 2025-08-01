@@ -1,4 +1,4 @@
-//js обновленный
+//js обновленный 1
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js')
