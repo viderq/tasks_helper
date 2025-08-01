@@ -1,80 +1,84 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <meta name="theme-color" content="#ffffff">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css">
-    <title>Flight Time Planner</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <title>Flight Time Planner</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="dashboard">
-        <div class="header">
-            <div class="time-group time-group-right">
-                <div class="current-time" id="destination-time">14:00</div>
-                <div class="destination-label">московское</div>
-            </div>
-            <div class="time-group time-group-left">
-                <div class="current-time" id="current-time">12:00</div>
-                <div class="destination-label">местное</div>
-            </div>
-        </div>
-
-        <button class="add-flight-btn" id="add-flight-btn">
-            <i class="fas fa-plus"></i>
-        </button>
-
-        <div class="modal input-group-modal" id="input-group-modal">
-            <div class="modal-content">
-                <div class="input-group">
-                    <div class="flight-inputs">
-                        <input type="date" placeholder="Дата рейса" maxlength="10" class="date-input">
-                        <div class="flight-time-inputs">
-                            <div class="flight-number-wrapper">
-                                <select class="flight-prefix">
-                                    <option value="SU">SU</option>
-                                    <option value="EVENT">Событие</option>
-                                </select>
-                                <input type="text" placeholder="0000" maxlength="4" class="flight-number" pattern="[0-9]*" inputmode="numeric">
-                            </div>
-                            <div class="flight-time-display" id="flight-time-display">
-                                Время вылета
-                                <div id="flight-time-spinner" class="spinner hidden"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="airports">
-                        <div class="airport">
-                            <i class="fas fa-plane-departure airport-icon"></i>
-                            <div class="airport-info">
-                                <div class="airport-code">---</div>
-                                <div class="airport-name">-----</div>
-                            </div>
-                        </div>
-
-                        <div class="airport">
-                            <i class="fas fa-plane-arrival airport-icon"></i>
-                            <div class="airport-info">
-                                <div class="airport-code">---</div>
-                                <div class="airport-name">-----</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flight-actions">
-                        <button class="create-duty-btn" id="create-duty-btn" disabled>
-                            <i class="fas fa-clipboard-list"></i> Создать наряд
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+  <div class="dashboard">
+    <div class="header">
+      <div class="time-group time-group-right">
+        <div class="current-time" id="destination-time">14:00</div>
+        <div class="destination-label">московское</div>
+      </div>
+      <div class="time-group time-group-left">
+        <div class="current-time" id="current-time">12:00</div>
+        <div class="destination-label">местное</div>
+      </div>
     </div>
-    <script src="script.js" defer></script>
+    <button class="add-flight-btn" id="add-flight-btn">
+      <i class="fas fa-plus"></i>
+    </button>
+    <div class="modal input-group-modal" id="input-group-modal">
+      <div class="modal-content">
+        <div class="input-group">
+          <div class="flight-inputs">
+            <input type="date" placeholder="Дата рейса" maxlength="10" class="date-input">
+            <div class="flight-time-inputs">
+              <div class="flight-number-wrapper">
+                <select class="flight-prefix">
+                  <option value="SU">SU</option>
+                  <option value="EVENT">Событие</option>
+                </select>
+                <input type="text" placeholder="0000" maxlength="4" class="flight-number" pattern="[0-9]*" inputmode="numeric">
+              </div>
+              <div class="flight-time-display" id="flight-time-display">
+                Время вылета
+                <div id="flight-time-spinner" class="spinner hidden"></div>
+              </div>
+            </div>
+          </div>
+          <div class="airports">
+            <div class="airport">
+              <i class="fas fa-plane-departure airport-icon"></i>
+              <div class="airport-info">
+                <div class="airport-code">---</div>
+                <div class="airport-name">-----</div>
+              </div>
+            </div>
+            <div class="airport">
+              <i class="fas fa-plane-arrival airport-icon"></i>
+              <div class="airport-info">
+                <div class="airport-code">---</div>
+                <div class="airport-name">-----</div>
+              </div>
+            </div>
+          </div>
+          <div class="flight-actions">
+            <button class="create-duty-btn" id="create-duty-btn" disabled>
+              <i class="fas fa-clipboard-list"></i> Создать наряд
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal add-another-modal" id="add-another-modal">
+      <div class="modal-content">
+        <h3>Добавить еще?</h3>
+        <div class="buttons">
+          <button class="yes-btn" id="add-another-yes">Да</button>
+          <button class="no-btn" id="add-another-no">Нет</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js" defer></script>
 </body>
 </html>

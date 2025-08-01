@@ -275,6 +275,8 @@ const airports = {
 };
 
 const CACHE_DURATION = 20 * 60 * 1000; // 20 минут
+let isAdditionalFlight = false;
+let currentDutyGroup = null;
 
 function fetchFlightInfo(flightNumber, date) {
   return new Promise((resolve, reject) => {
@@ -309,7 +311,6 @@ function fetchFlightInfo(flightNumber, date) {
   });
 }
 
-// Функция с задержкой (debounce) для предотвращения частых запросов
 function debounce(func, delay) {
   let timeoutId;
   return function (...args) {
@@ -331,7 +332,6 @@ function displayFlightInfo(flightData, departureAirport, arrivalAirport, date) {
     console.log("Нет данных о маршруте или маршруты отсутствуют");
     return null;
   }
-
   const flight = flightData.data.routes[0];
   const leg = flight.routeType === 'MultiLeg' && flight.legs ? flight.legs[0] : flight.leg || flight;
   if (!leg || !leg.departure || !leg.departure.times || !leg.arrival || !leg.arrival.times) {
@@ -340,40 +340,27 @@ function displayFlightInfo(flightData, departureAirport, arrivalAirport, date) {
     console.log("Ошибка: Данные о вылете или прилете отсутствуют, leg:", leg);
     return null;
   }
-
   const departureTimeStr = leg.departure.times.scheduledDeparture?.localTime || leg.departure.times.estimatedBlockOff?.localTime;
   const arrivalTimeStr = leg.arrival.times.scheduledArrival?.localTime || leg.arrival.times.estimatedBlockOn?.localTime;
   const aircraftType = leg.equipment?.aircraft?.scheduled?.type || 'N/A';
   const flyingTime = flight.flyingTime || 'N/A';
-
   const flightDate = new Date(date);
   let departureDateTime;
   if (!departureTimeStr || !arrivalTimeStr) {
     console.error("Время вылета или прилета не указано в данных API");
     return null;
   }
-
   const [depHours, depMinutes] = departureTimeStr.split(':').map(Number);
   departureDateTime = new Date(flightDate);
   departureDateTime.setHours(depHours, depMinutes, 0, 0);
-
   if (isNaN(departureDateTime.getTime())) {
     console.error("Некорректное время вылета:", departureTimeStr);
     return null;
   }
-
-  const now = new Date();
-  const moscowTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000) + 3 * 60 * 60 * 1000); // +3 для Москвы
-  if (departureDateTime < moscowTime) {
-    console.log("Время вылета рейса уже прошло, текущее московское время:", moscowTime);
-    return null;
-  }
-
   const depIata = leg.departure.scheduled.airportCode || 'N/A';
   const arrIata = leg.arrival.scheduled.airportCode || 'N/A';
   const depInfo = airports[depIata] || `${depIata} - Неизвестно`;
   const arrInfo = airports[arrIata] || `${arrIata} - Неизвестно`;
-
   departureAirport.innerHTML = `
     <div class="airport-code">${depIata}</div>
     <div class="airport-name">${depInfo.split(' - ')[1] || 'Неизвестно'}</div>
@@ -382,26 +369,21 @@ function displayFlightInfo(flightData, departureAirport, arrivalAirport, date) {
     <div class="airport-code">${arrIata}</div>
     <div class="airport-name">${arrInfo.split(' - ')[1] || 'Неизвестно'}</div>
   `;
-
   const flightTimeDisplay = document.getElementById("flight-time-display");
   const spinner = document.getElementById("flight-time-spinner");
-  if (spinner) spinner.classList.add("hidden"); // Прячем спиннер после загрузки
+  if (spinner) spinner.classList.add("hidden");
   if (flightTimeDisplay) {
     flightTimeDisplay.textContent = `${departureDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
   }
-
-  // ✅ Активируем кнопку "Создать наряд"
   const createDutyBtn = document.getElementById('create-duty-btn');
   if (createDutyBtn) {
     createDutyBtn.disabled = false;
   }
-
   console.log("Аэропорт вылета:", depIata);
   console.log("Аэропорт прилета:", arrIata);
   console.log("Тип самолета:", aircraftType);
   console.log("Время в полете:", flyingTime);
   console.log("Время прилета:", arrivalTimeStr);
-
   return { departureDateTime, arrivalTimeStr, depIata, arrIata, aircraftType, flyingTime };
 }
 
@@ -412,17 +394,14 @@ async function handleFlightInfoUpdate(date, flightNumberFull, departureAirport, 
       arrivalAirport.innerHTML = `<div class="airport-code">---</div><div class="airport-name">-----</div>`;
       return null;
     }
-
     showLoadingSpinner(departureAirport, arrivalAirport);
     const spinner = document.getElementById("flight-time-spinner");
     const flightTimeDisplay = document.getElementById("flight-time-display");
-    if (spinner) spinner.classList.remove("hidden"); // Показываем спиннер
-    if (flightTimeDisplay) flightTimeDisplay.textContent = ''; // Очищаем, спиннер будет виден
-
+    if (spinner) spinner.classList.remove("hidden");
+    if (flightTimeDisplay) flightTimeDisplay.textContent = '';
     const cacheKey = `flightData_${flightNumberFull}_${date}`;
     const cachedData = localStorage.getItem(cacheKey);
     let flightData = null;
-
     if (cachedData) {
       const parsedData = JSON.parse(cachedData);
       const currentTime = Date.now();
@@ -437,7 +416,6 @@ async function handleFlightInfoUpdate(date, flightNumberFull, departureAirport, 
       console.log("Данные отсутствуют в кэше, делаем новый запрос для", flightNumberFull, date);
       flightData = await fetchFlightInfo(flightNumberFull, date);
     }
-
     await new Promise(resolve => setTimeout(resolve, 500));
     return displayFlightInfo(flightData, departureAirport, arrivalAirport, date);
   } catch (error) {
@@ -453,7 +431,7 @@ function createFlightBlock(departureDateTime, arrivalTimeStr, depIata, arrIata, 
   const dayName = daysShort[departureDateTime.getDay()];
   const formattedDate = departureDateTime.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
   const departureTime = departureDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const arrivalTime = arrivalTimeStr; // Используем время прилета из ответа сервера
+  const arrivalTime = arrivalTimeStr;
   const arrFormattedDate = new Date(departureDateTime.getTime()).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
   const arrDayName = daysShort[new Date(departureDateTime.getTime()).getDay()];
   const depCity = airports[depIata]?.split(' - ')[1]?.split('/')[0] || depIata;
@@ -492,8 +470,23 @@ function createFlightBlock(departureDateTime, arrivalTimeStr, depIata, arrIata, 
     </div>
   `;
 
-  const header = document.querySelector('.header');
-  header.insertAdjacentElement('afterend', flightBlock);
+  const dashboard = document.querySelector('.dashboard');
+  if (isAdditionalFlight && currentDutyGroup) {
+    currentDutyGroup.appendChild(flightBlock);
+  } else {
+    const existingFlightBlocks = document.querySelectorAll('.flight-block, .duty-group');
+    if (existingFlightBlocks.length > 0) {
+      existingFlightBlocks[existingFlightBlocks.length - 1].insertAdjacentElement('afterend', flightBlock);
+    } else {
+      const header = document.querySelector('.header');
+      if (header) {
+        header.insertAdjacentElement('afterend', flightBlock);
+      } else {
+        dashboard.appendChild(flightBlock);
+      }
+    }
+  }
+
   setTimeout(() => {
     flightBlock.classList.add('visible');
   }, 0);
@@ -508,30 +501,104 @@ function createFlightBlock(departureDateTime, arrivalTimeStr, depIata, arrIata, 
     aircraftType: aircraftType,
     flyingTime: flyingTime || 'N/A',
     depCity: depCity,
-    arrCity: arrCity
+    arrCity: arrCity,
+    isAdditional: isAdditionalFlight
   };
-
   localStorage.setItem(`flight_${flightNumberFull}_${date}`, JSON.stringify(flightData));
-
   flightBlock.addEventListener('click', () => openEditModal(flightBlock, flightData));
 }
 
 function loadExistingFlights() {
   const keys = Object.keys(localStorage);
-  keys.forEach(key => {
+  let lastDutyGroup = null;
+  let hasAdditionalFlights = false;
+  keys.sort().forEach(key => {
     if (key.startsWith('flight_')) {
       const flightData = JSON.parse(localStorage.getItem(key));
       const [_, flightNumberFull, date] = key.split('_');
       const departureDateTime = new Date(flightData.departureDateTime);
       const flyingTime = flightData.flyingTime || 'N/A';
+      isAdditionalFlight = flightData.isAdditional || false;
+      if (isAdditionalFlight) {
+        hasAdditionalFlights = true;
+        if (!lastDutyGroup) {
+          lastDutyGroup = document.createElement('div');
+          lastDutyGroup.className = 'duty-group visible';
+          const existingFlightBlocks = document.querySelectorAll('.flight-block, .duty-group');
+          const dashboard = document.querySelector('.dashboard');
+          if (existingFlightBlocks.length > 0) {
+            existingFlightBlocks[existingFlightBlocks.length - 1].insertAdjacentElement('afterend', lastDutyGroup);
+          } else {
+            const header = document.querySelector('.header');
+            if (header) {
+              header.insertAdjacentElement('afterend', lastDutyGroup);
+            } else {
+              dashboard.appendChild(lastDutyGroup);
+            }
+          }
+        }
+        lastDutyGroup.appendChild(document.createElement('div')); // Временный маркер
+      }
       createFlightBlock(departureDateTime, flightData.arrivalTime, flightData.depIata, flightData.arrIata, flightData.aircraftType, flightNumberFull, date, flyingTime);
     }
   });
+  // Удаляем lastDutyGroup, если нет добавленных flight-block
+  if (lastDutyGroup && lastDutyGroup.children.length === 0) {
+    lastDutyGroup.remove();
+  }
+  isAdditionalFlight = false;
+  currentDutyGroup = null;
+}
+
+function showAddAnotherModal() {
+  const addAnotherModal = document.getElementById('add-another-modal');
+  addAnotherModal.classList.add('active');
+  const yesBtn = document.getElementById('add-another-yes');
+  const noBtn = document.getElementById('add-another-no');
+
+  const yesHandler = () => {
+    isAdditionalFlight = true;
+    if (!currentDutyGroup) {
+      currentDutyGroup = document.createElement('div');
+      currentDutyGroup.className = 'duty-group visible';
+      const existingFlightBlocks = document.querySelectorAll('.flight-block, .duty-group');
+      const dashboard = document.querySelector('.dashboard');
+      if (existingFlightBlocks.length > 0) {
+        existingFlightBlocks[existingFlightBlocks.length - 1].insertAdjacentElement('afterend', currentDutyGroup);
+      } else {
+        const header = document.querySelector('.header');
+        if (header) {
+          header.insertAdjacentElement('afterend', currentDutyGroup);
+        } else {
+          dashboard.appendChild(currentDutyGroup);
+        }
+      }
+    }
+    addAnotherModal.classList.remove('active');
+    const inputGroupModal = document.getElementById('input-group-modal');
+    inputGroupModal.classList.add('active');
+    document.querySelector('.date-input').value = '';
+    document.querySelector('.flight-prefix').value = 'SU';
+    document.querySelector('.flight-number').value = '';
+    document.getElementById('flight-time-display').textContent = 'Время вылета';
+    document.getElementById('create-duty-btn').disabled = true;
+    yesBtn.removeEventListener('click', yesHandler);
+  };
+
+  const noHandler = () => {
+    isAdditionalFlight = false;
+    currentDutyGroup = null;
+    addAnotherModal.classList.remove('active');
+    document.getElementById('input-group-modal').classList.remove('active');
+    noBtn.removeEventListener('click', noHandler);
+  };
+
+  yesBtn.addEventListener('click', yesHandler);
+  noBtn.addEventListener('click', noHandler);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   loadExistingFlights();
-
   const addFlightBtn = document.getElementById('add-flight-btn');
   const inputGroupModal = document.getElementById('input-group-modal');
   const dateInput = document.querySelector('.date-input');
@@ -541,6 +608,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const arrivalAirport = document.querySelector('.airports .airport:nth-child(2) .airport-info');
 
   addFlightBtn.addEventListener('click', () => {
+    isAdditionalFlight = false;
+    currentDutyGroup = null;
     inputGroupModal.classList.add('active');
     dateInput.value = '';
     flightPrefix.value = 'SU';
@@ -566,9 +635,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (createDutyBtn) {
       createDutyBtn.disabled = true;
     }
-
     console.log("Собранные данные:", { date, prefix, number, flightNumberFull });
-
     if (date && flightNumberFull && number.length >= 3 && /^\d+$/.test(number)) {
       const flightData = await handleFlightInfoUpdate(date, flightNumberFull, departureAirport, arrivalAirport);
       if (flightData) {
@@ -582,7 +649,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const debouncedHandleFlightSubmit = debounce(handleFlightSubmit, 500);
-
   dateInput.addEventListener('input', debouncedHandleFlightSubmit);
   flightPrefix.addEventListener('change', debouncedHandleFlightSubmit);
   flightNumber.addEventListener('input', debouncedHandleFlightSubmit);
@@ -597,13 +663,11 @@ createDutyBtn.addEventListener('click', () => {
   const number = flightNumber.value.trim().replace(/[^0-9]/g, '');
   const flightNumberFull = `${prefix}${number}`.padStart(6, '0').toUpperCase();
   const date = dateInput.value;
-
   const cachedData = JSON.parse(localStorage.getItem(`flightData_${flightNumberFull}_${date}`));
   const flightData = displayFlightInfo(cachedData?.data || null, document.querySelector('.airports .airport:nth-child(1) .airport-info'), document.querySelector('.airports .airport:nth-child(2) .airport-info'), date);
-
   if (flightData) {
     createFlightBlock(flightData.departureDateTime, flightData.arrivalTimeStr, flightData.depIata, flightData.arrIata, flightData.aircraftType, flightNumberFull, date, flightData.flyingTime);
-    document.getElementById('input-group-modal').classList.remove('active');
+    showAddAnotherModal();
   } else {
     console.log("Данные рейса не найдены для создания наряда");
   }
@@ -615,7 +679,6 @@ function updateTimeDisplays() {
   const moscowOffset = 3 * 60 + now.getTimezoneOffset();
   const moscowTime = new Date(now.getTime() + moscowOffset * 60 * 1000);
   const moscowTimeStr = moscowTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
   const localEl = document.getElementById('current-time');
   const moscowEl = document.getElementById('destination-time');
   if (localEl) localEl.textContent = localTimeStr;
@@ -658,14 +721,11 @@ function openEditModal(flightBlock, flightData) {
       </div>
     </div>
   `;
-
   document.body.appendChild(modal);
   modal.classList.add('active');
-
   const saveBtn = modal.querySelector('#save-edit');
   const cancelBtn = modal.querySelector('#cancel-edit');
   const deleteBtn = modal.querySelector('#delete-edit');
-
   saveBtn.addEventListener('click', () => saveEdit(modal, flightBlock, flightData));
   cancelBtn.addEventListener('click', () => modal.remove());
   deleteBtn.addEventListener('click', () => deleteFlight(modal, flightBlock, flightData));
@@ -697,23 +757,21 @@ function saveEdit(modal, flightBlock, flightData) {
     aircraftType,
     flyingTime,
     depCity,
-    arrCity
+    arrCity,
+    isAdditional: flightData.isAdditional
   };
-
   localStorage.removeItem(`flight_${flightData.flightNumber}_${flightData.date}`);
   localStorage.setItem(`flight_${flightNumberFull}_${date.toISOString().split('T')[0]}`, JSON.stringify(newFlightData));
 
   const flightCard = flightBlock.querySelector('.flight-card');
   flightCard.setAttribute('data-flight-number', flightNumberFull);
   flightCard.setAttribute('data-date', date.toISOString().split('T')[0]);
-
   const daysShort = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
   const dayName = daysShort[date.getDay()];
   const formattedDate = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
   const departureTimeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const arrFormattedDate = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
   const arrDayName = daysShort[date.getDay()];
-
   flightBlock.querySelector('.flight-date-row:first-child span:first-child').textContent = `${formattedDate}, ${dayName}`;
   flightBlock.querySelector('.flight-date-row:first-child .iata-code').textContent = depIata;
   flightBlock.querySelector('.flight-time-row:first-child .flight-time').textContent = departureTimeStr;
@@ -732,7 +790,14 @@ function saveEdit(modal, flightBlock, flightData) {
 function deleteFlight(modal, flightBlock, flightData) {
   if (confirm('Вы уверены, что хотите удалить этот наряд?')) {
     localStorage.removeItem(`flight_${flightData.flightNumber}_${flightData.date}`);
+    const parentDutyGroup = flightBlock.closest('.duty-group');
     flightBlock.remove();
+    if (parentDutyGroup && parentDutyGroup.querySelectorAll('.flight-block').length === 0) {
+      parentDutyGroup.remove();
+      if (currentDutyGroup === parentDutyGroup) {
+        currentDutyGroup = null;
+      }
+    }
     modal.remove();
   }
 }

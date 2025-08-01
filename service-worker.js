@@ -1,88 +1,105 @@
-/*  Service Worker для “Speech Test”  */
-const CACHE = 'tasks-cache-v0.3';
+const CACHE_NAME = 'tasks-cache-v0.5';
 
-/* Файлы, которые нужны оф-лайн сразу после установки */
-const PRECACHE = [
+const PRECACHE_URLS = [
+  './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
   './styles.css'
 ];
 
-/* ——— helper: нормализуем ключи ——— */
+/* --- normalize helper --- */
 function normalize(request) {
   const url = new URL(request.url);
-
-  /* Корень сайта → ./index.html */
   if (url.origin === location.origin && url.pathname === '/') {
     return new Request('./index.html', { mode: 'same-origin' });
   }
-
-  /* Убираем query-строку, чтобы /index.html?… не плодил дубликаты */
-  url.search = '';
+  url.search = ''; // убираем query
   return new Request(url, {
     mode: request.mode,
     credentials: request.credentials
   });
 }
 
-/* ---------- INSTALL ---------- */
+/* --- INSTALL --- */
 self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE).then(async cache => {
-      await Promise.all(
-  PRECACHE.map(async url => {
-    try {
-      const response = await fetch(url, { cache: 'no-cache' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      await cache.put(normalize(new Request(url)), response.clone());
-    } catch (err) {
-      console.error(`❌ Failed to precache ${url}:`, err);
-    }
-  })
-);
-
+    caches.open(CACHE_NAME).then(async cache => {
+      for (const url of PRECACHE_URLS) {
+        try {
+          const response = await fetch(url, { cache: 'no-store' });
+          if (response.ok) {
+            await cache.put(normalize(new Request(url)), response.clone());
+          }
+        } catch (err) {
+          console.warn(`Не удалось закэшировать ${url}`, err);
+        }
+      }
     })
   );
 });
 
-/* ---------- ACTIVATE ---------- */
+/* --- ACTIVATE --- */
 self.addEventListener('activate', event => {
   self.clients.claim();
   event.waitUntil(
-    caches.keys().then(names =>
-      Promise.all(names.map(n => (n === CACHE ? null : caches.delete(n))))
+    caches.keys().then(keys =>
+      Promise.all(keys.map(key => {
+        if (key !== CACHE_NAME) return caches.delete(key);
+      }))
     )
   );
 });
 
-/* ---------- FETCH ---------- */
+/* --- FETCH --- */
 self.addEventListener('fetch', event => {
   const { request } = event;
 
-  /* Навигации → всегда index.html */
+  // Пропускаем запросы на API, PHP, POST и не GET запросы
+  if (
+    request.method !== 'GET' ||
+    request.url.includes('/api/') ||
+    request.url.endsWith('.php') ||
+    request.url.includes('bot') ||
+    request.url.includes('token=')
+  ) {
+    return; // не обрабатываем
+  }
+
+  // Запрос навигации — всегда index.html
   if (request.mode === 'navigate') {
     event.respondWith(
-      caches.match(normalize(new Request('./index.html')))
-            .then(resp => resp || fetch(request))
+      caches.match(normalize(new Request('./index.html'))).then(
+        resp => resp || fetch(request).catch(() => offlineFallback())
+      )
     );
     return;
   }
 
-  /* Статика: cache-first, затем сеть с сохранением */
+  // Остальное — cache-first
   event.respondWith(
-    caches.match(normalize(request)).then(
-      cached => cached ||
-        fetch(request).then(networkResp => {
-          if (
-            networkResp.ok &&
-            networkResp.url.startsWith(self.location.origin)
-          ) {
-            caches.open(CACHE)
-                  .then(c => c.put(normalize(request), networkResp.clone()));
-          }
-          return networkResp;
-        }).catch(() => caches.match(normalize(new Request('./index.html'))))
-    )
+    caches.match(normalize(request)).then(cached => {
+      return cached || fetch(request).then(resp => {
+        if (
+          resp.ok &&
+          resp.type === 'basic' &&
+          resp.url.startsWith(self.location.origin)
+        ) {
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(normalize(request), resp.clone());
+          });
+        }
+        return resp;
+      }).catch(() => {
+        // fallback на index.html если ничего не найдено
+        return caches.match('./index.html');
+      });
+    })
   );
 });
+
+function offlineFallback() {
+  return new Response('<h1>Нет подключения</h1><p>Вы офлайн</p>', {
+    headers: { 'Content-Type': 'text/html' }
+  });
+}
