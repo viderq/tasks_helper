@@ -1,27 +1,23 @@
-const CACHE_NAME = 'tasks-cache-v0.6';
+const CACHE_NAME = 'tasks-cache-v0.7';
 
 const PRECACHE_URLS = [
   './',
   './index.html',
   './manifest.json',
   './styles.css',
-  './script.js', // добавь вручную свой JS-файл
+  './script.js', // твой JS
 ];
 
-// Файлы, которые мы считаем кэшируемыми по расширению
+// Расширения для кешируемых локальных ресурсов
 const CACHEABLE_EXTENSIONS = ['.html', '.js', '.css', '.json', '.png', '.jpg', '.jpeg', '.svg', '.webp', '.woff', '.woff2', '.ttf'];
 
-// Упрощённая нормализация URL
+// Нормализация для навигации (главной страницы)
 function normalize(request) {
   const url = new URL(request.url);
-  if (url.origin === location.origin && url.pathname === '/') {
+  if (url.origin === location.origin && (url.pathname === '/' || url.pathname === '/index.html')) {
     return new Request('./index.html', { mode: 'same-origin' });
   }
-  url.search = '';
-  return new Request(url, {
-    mode: request.mode,
-    credentials: request.credentials
-  });
+  return request; // НЕ убираем query
 }
 
 // INSTALL
@@ -59,57 +55,49 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const { request } = event;
 
-  if (
-    request.method !== 'GET' ||
-    request.url.includes('/api/') ||
-    request.url.endsWith('.php') ||
-    request.url.includes('token=') ||
-    request.url.includes('bot')
-  ) {
-    return; // пропускаем нежелательные запросы
+  // Пропускаем все запросы к внешним серверам (не наш origin)
+  if (new URL(request.url).origin !== self.location.origin) {
+    // Прямо перекидываем запрос в сеть без кеша
+    return;
   }
 
-  const normalized = normalize(request);
+  // Пропускаем не GET запросы
+  if (request.method !== 'GET') return;
 
-  // Страница навигации → index.html
+  // Навигация → отдаём из кеша index.html или сеть
   if (request.mode === 'navigate') {
     event.respondWith(
       caches.match('./index.html').then(
-        cached => cached || fetch(normalized).catch(() => offlineFallback())
+        cached => cached || fetch(request).catch(() => offlineFallback())
       )
     );
     return;
   }
 
-  // Все остальные запросы: cache-first
+  // Остальное — cache-first для локальных ресурсов
   event.respondWith(
-    caches.match(normalized).then(cached => {
+    caches.match(request).then(cached => {
       if (cached) return cached;
 
-      return fetch(normalized)
+      return fetch(request)
         .then(response => {
-          // Кэшируем, если ресурс подходит
-          const ext = normalized.url.split('.').pop();
+          const ext = request.url.split('.').pop().toLowerCase();
           if (
             response.ok &&
             response.type === 'basic' &&
-            response.url.startsWith(self.location.origin) &&
             CACHEABLE_EXTENSIONS.includes('.' + ext)
           ) {
             caches.open(CACHE_NAME).then(cache => {
-              cache.put(normalized, response.clone());
+              cache.put(request, response.clone());
             });
           }
           return response;
         })
-        .catch(() => {
-          return offlineFallback();
-        });
+        .catch(() => offlineFallback());
     })
   );
 });
 
-// Fallback страница
 function offlineFallback() {
   return new Response('<h1>Вы офлайн</h1><p>Проверьте соединение</p>', {
     headers: { 'Content-Type': 'text/html' }
