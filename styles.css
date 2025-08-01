@@ -1,1405 +1,1416 @@
 :root {
-    --primary: #3B82F6;
-    --primary-light: rgba(59, 130, 246, 0.2);
-    --surface: #FFFFFF;
-    --background: #F8FAFC;
-    --text: #1E293B;
-    --border: #E2E8F0;
-    --icon-color: #6B7280;
-    --secondary-text: #64748B;
-    --warning: #F97316;
-    --success: #28a745; /* Для зеленой рамки и кнопки "Да" */
-    --danger: #dc3545; /* Для кнопки "Нет" */
+  --primary: #3B82F6;
+  --primary-light: rgba(59, 130, 246, 0.2);
+  --surface: #FFFFFF;
+  --background: #F8FAFC;
+  --text: #1E293B;
+  --border: #E2E8F0;
+  --icon-color: #6B7280;
+  --secondary-text: #64748B;
+  --warning: #F97316;
+  --success: #28a745; /* Для зеленой рамки и кнопки "Да" */
+  --danger: #dc3545; /* Для кнопки "Нет" */
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        --surface: #1C1C1C;
-        --background: #000000;
-        --text: #EDEDED;
-        --border: #333333;
-        --icon-color: #999999;
-        --secondary-text: #999999;
-        --warning: #FB923C;
-        --primary: #808080;
-        --primary-light: rgba(128, 128, 128, 0.2);
-        --accent: #D4AF37;
-        --accent-light: rgba(212, 175, 55, 0.2);
-        --success: #34C759; /* Зеленый для темной темы */
-        --danger: #FF4C4C; /* Красный для темной темы */
-    }
+  :root {
+    --surface: #1C1C1C;
+    --background: #000000;
+    --text: #EDEDED;
+    --border: #333333;
+    --icon-color: #999999;
+    --secondary-text: #999999;
+    --warning: #FB923C;
+    --primary: #808080;
+    --primary-light: rgba(128, 128, 128, 0.2);
+    --accent: #D4AF37;
+    --accent-light: rgba(212, 175, 55, 0.2);
+    --success: #34C759; /* Зеленый для темной темы */
+    --danger: #FF4C4C; /* Красный для темной темы */
+  }
 }
 
 .flight-time-display {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    padding: 0.75rem !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 0.875rem !important;
-    height: 46px !important;
-    font-size: 1.05rem !important;
-    background: var(--surface) !important;
-    color: var(--text) !important;
-    text-align: center !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    position: relative !important;
-    box-sizing: border-box !important;
-    transition: width 0.3s ease, max-width 0.3s ease !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  padding: 0.75rem !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 0.875rem !important;
+  height: 46px !important;
+  font-size: 1.05rem !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+  transition: width 0.3s ease, max-width 0.3s ease !important;
 }
 
 @media (prefers-color-scheme: dark) {
-    .flight-time-display {
-        color: #EDEDED !important;
-    }
+  .flight-time-display {
+    color: #EDEDED !important;
+  }
 }
 
 .flight-time-display.no-data {
-    color: var(--warning) !important;
+  color: var(--warning) !important;
 }
 
 .flight-time-display .spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    border-top: 2px solid var(--primary);
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-    margin-left: 0.5rem;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-top: 2px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-left: 0.5rem;
 }
 
 .flight-time-display .hidden {
-    display: none;
+  display: none;
 }
 
 .flight-time-display:empty::before {
-    content: attr(placeholder);
-    color: var(--secondary-text);
-    opacity: 0.7;
+  content: attr(placeholder);
+  color: var(--secondary-text);
+  opacity: 0.7;
 }
 
 .flight-time-display.input-mode {
-    padding: 0;
-    border: 1px solid var(--border);
-    border-radius: 0.875rem;
-    height: 46px;
-    font-size: 1.05rem;
-    background: var(--surface);
-    color: var(--text);
-    text-align: center;
-    outline: none;
-    width: 50%;
-    max-width: 180px;
-    box-sizing: border-box;
-    flex-shrink: 1;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  height: 46px;
+  font-size: 1.05rem;
+  background: var(--surface);
+  color: var(--text);
+  text-align: center;
+  outline: none;
+  width: 50%;
+  max-width: 180px;
+  box-sizing: border-box;
+  flex-shrink: 1;
 }
 
 .flight-time-display.input-mode:focus {
-    border-color: var(--primary);
+  border-color: var(--primary);
 }
 
 @keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
 }
 
-.airport-code.shake,
-.airport-name.shake {
-    animation: shake 0.3s ease-in-out;
+.airport-code.shake, .airport-name.shake {
+  animation: shake 0.3s ease-in-out;
 }
 
 @keyframes appear {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 @keyframes disappear {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(0.8); opacity: 0; }
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0; }
 }
 
 .icon-appear {
-    animation: appear 0.3s ease-in-out;
+  animation: appear 0.3s ease-in-out;
 }
 
 .icon-disappear {
-    animation: disappear 0.3s ease-in-out;
+  animation: disappear 0.3s ease-in-out;
 }
 
 @keyframes fade {
-    0% { opacity: 0; transform: translateY(5px); }
-    100% { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; transform: translateY(5px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-.airport-code.fade,
-.airport-name.fade {
-    animation: fade 0.3s ease-in-out;
-    animation-fill-mode: forwards;
+.airport-code.fade, .airport-name.fade {
+  animation: fade 0.3s ease-in-out;
+  animation-fill-mode: forwards;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-html,
-body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-    touch-action: pan-x pan-y;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  touch-action: pan-x pan-y;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-    display: none;
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
 }
 
 body {
-    background: var(--background);
-    color: var(--text);
-    min-height: 100vh;
-    position: relative;
-    margin: 0 auto;
-    max-width: 800px;
-    padding: 1.5rem;
-    box-sizing: border-box;
+  background: var(--background);
+  color: var(--text);
+  min-height: 100vh;
+  position: relative;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 1.5rem;
+  box-sizing: border-box;
 }
 
 .dashboard {
-    display: grid;
-    gap: 1.5rem;
-    padding-bottom: 4rem;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+  display: grid;
+  gap: 1.5rem;
+  padding-bottom: 4rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .dashboard::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 0.5rem 1rem;
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .time-group {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    flex-shrink: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex-shrink: 1;
 }
 
 .current-time {
-    font-size: 2rem;
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--text);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
 }
 
 .destination-label {
-    font-size: 0.875rem;
-    color: var(--secondary-text);
-    margin-top: 0.1rem;
-    opacity: 0.9;
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+  margin-top: 0.1rem;
+  opacity: 0.9;
 }
 
 .add-flight-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    background: var(--surface);
-    color: var(--icon-color);
-    font-size: 1.4rem;
-    cursor: pointer;
-    margin: 0.5rem auto;
-    transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--icon-color);
+  font-size: 1.4rem;
+  cursor: pointer;
+  margin: 0.5rem auto;
+  transition: all 0.2s;
 }
 
 .add-flight-btn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
 }
 
 .input-group-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .input-group-modal.active {
-    display: flex;
-    opacity: 1;
+  display: flex;
+  opacity: 1;
 }
 
 .input-group {
-    background: var(--surface);
-    padding: 1.5rem;
-    border-radius: 1.25rem;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    width: 100%;
-    max-width: 500px;
+  background: var(--surface);
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 500px;
 }
 
 .flight-inputs {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    width: 100%;
-    max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 .date-input {
-    width: 100%;
-    max-width: 100%;
-    padding: 0.65rem;
-    border: 1px solid var(--border);
-    border-radius: 0.875rem;
-    height: 46px;
-    font-size: 0.9rem;
-    background: var(--surface);
-    color: var(--text);
-    transition: border-color 0.2s, width 0.3s ease, max-width 0.3s ease;
-    text-align: center;
-    box-sizing: border-box;
-    margin-top: 0.3rem;
-    align-items: center;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  height: 46px;
+  font-size: 0.9rem;
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color 0.2s, width 0.3s ease, max-width 0.3s ease;
+  text-align: center;
+  box-sizing: border-box;
+  margin-top: 0.3rem;
+  align-items: center;
 }
 
 .date-input:focus {
-    outline: none;
-    border-color: var(--primary);
+  outline: none;
+  border-color: var(--primary);
 }
 
 .date-input::placeholder {
-    color: var(--secondary-text);
-    opacity: 0.7;
+  color: var(--secondary-text);
+  opacity: 0.7;
 }
 
 .flight-time-inputs {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    flex-wrap: nowrap;
-    width: 100%;
-    max-width: 100%;
-    justify-content: center;
-    box-sizing: border-box;
-    transition: width 0.3s ease, max-width 0.3s ease;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 100%;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: width 0.3s ease, max-width 0.3s ease;
 }
 
 .flight-number-wrapper {
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--border);
-    border-radius: 0.875rem;
-    height: 46px;
-    overflow: hidden;
-    transition: border-color 0.2s;
-    width: 100%;
-    max-width: 300px;
-    box-sizing: border-box;
-    flex-shrink: 1;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  height: 46px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
+  flex-shrink: 1;
 }
 
 .flight-number-wrapper:focus-within {
-    border-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .flight-prefix {
-    padding: 0.5rem 0.3rem !important;
-    border: none !important;
-    background: var(--surface) !important;
-    color: var(--text) !important;
-    font-size: 1.05rem !important;
-    cursor: pointer !important;
-    outline: none !important;
-    border-right: 1px solid var(--border) !important;
-    width: 60px !important;
-    min-width: 60px !important;
-    max-width: 60px !important;
-    text-align: center !important;
-    transition: none !important;
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23999999" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') !important;
-    background-repeat: no-repeat !important;
-    background-position: right 0.3rem center !important;
-    background-size: 1rem !important;
-    box-sizing: border-box !important;
+  padding: 0.5rem 0.3rem !important;
+  border: none !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  font-size: 1.05rem !important;
+  cursor: pointer !important;
+  outline: none !important;
+  border-right: 1px solid var(--border) !important;
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+  text-align: center !important;
+  transition: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23999999" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.3rem center !important;
+  background-size: 1rem !important;
+  box-sizing: border-box !important;
 }
 
 .flight-prefix.expanded {
-    width: 3ch !important;
-    max-width: 3ch !important;
+  width: 3ch !important;
+  max-width: 3ch !important;
 }
 
 .flight-number {
-    flex: 1;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 0;
-    height: 100%;
-    font-size: 1.05rem;
-    background: var(--surface);
-    color: var(--text);
-    text-align: center;
-    outline: none;
-    min-width: 0;
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0;
+  height: 100%;
+  font-size: 1.05rem;
+  background: var(--surface);
+  color: var(--text);
+  text-align: center;
+  outline: none;
+  min-width: 0;
 }
 
 .flight-number::placeholder {
-    color: var(--secondary-text);
-    opacity: 0.7;
+  color: var(--secondary-text);
+  opacity: 0.7;
 }
 
 .airports {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
 }
 
 .airport {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-radius: 1rem;
-    transition: transform 0.2s;
-    min-width: 0;
-    flex-shrink: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-radius: 1rem;
+  transition: transform 0.2s;
+  min-width: 0;
+  flex-shrink: 1;
 }
 
 .airport-icon {
-    font-size: 1.4rem;
-    color: var(--icon-color);
+  font-size: 1.4rem;
+  color: var(--icon-color);
 }
 
 .airport-info {
-    line-height: 1.4;
-    text-align: center;
+  line-height: 1.4;
+  text-align: center;
 }
 
 .airport-code {
-    font-weight: 700;
-    font-size: 1.1em;
+  font-weight: 700;
+  font-size: 1.1em;
 }
 
 .airport-name {
-    font-size: 0.85em;
-    color: var(--secondary-text);
+  font-size: 0.85em;
+  color: var(--secondary-text);
 }
 
 .settings-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  overflow: hidden;
 }
 
 .settings-modal.active {
-    display: flex;
-    opacity: 1;
+  display: flex;
+  opacity: 1;
 }
 
 .modal-content {
-    padding: 1.5rem;
-    max-width: 350px;
-    width: 90%;
-    position: relative;
-    text-align: left;
-    animation: modalFadeIn 0.3s ease-in-out;
-    background: var(--surface);
-    border-radius: 1.25rem;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  max-width: 350px;
+  width: 90%;
+  position: relative;
+  text-align: left;
+  animation: modalFadeIn 0.3s ease-in-out;
+  background: var(--surface);
+  border-radius: 1.25rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 @keyframes modalFadeIn {
-    0% { opacity: 0; transform: scale(0.95); }
-    100% { opacity: 1; transform: scale(1); }
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 .modal-content h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 1rem;
-    text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .close-modal {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    background: none;
-    border: none;
-    color: var(--icon-color);
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    transition: color 0.2s;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--icon-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s;
 }
 
 .close-modal:hover {
-    color: var(--primary);
+  color: var(--primary);
 }
 
 .timezone-mode {
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    border-radius: 0.875rem;
-    background: var(--background);
-    transition: background 0.2s;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  border-radius: 0.875rem;
+  background: var(--background);
+  transition: background 0.2s;
 }
 
 .timezone-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .timezone-icon {
-    font-size: 1.2rem;
-    color: var(--icon-color);
+  font-size: 1.2rem;
+  color: var(--icon-color);
 }
 
 .timezone-mode h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .timezone-mode label {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
 }
 
 .timezone-mode input[type="checkbox"] {
-    width: 1.2rem;
-    height: 1.2rem;
-    accent-color: var(--primary);
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.2s;
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--primary);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
 }
 
 .timezone-mode input[type="checkbox"]:hover {
-    box-shadow: 0 0 0 2px var(--primary-light);
+  box-shadow: 0 0 0 2px var(--primary-light);
 }
 
 .modal-content label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
 }
 
 .modal-content select {
-    width: auto;
-    max-width: 250px;
-    min-width: 150px;
-    padding: 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 0.875rem;
-    background: var(--background);
-    color: var(--text);
-    font-size: 0.95rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23999999" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 1rem;
-    cursor: pointer;
-    display: inline-block;
-    box-sizing: border-box;
+  width: auto;
+  max-width: 250px;
+  min-width: 150px;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--background);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23999999" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  cursor: pointer;
+  display: inline-block;
+  box-sizing: border-box;
 }
 
 .modal-content select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-light);
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
 }
 
 .modal-content select:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .travel-time-mode {
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    border-radius: 0.875rem;
-    background: var(--background);
-    transition: background 0.2s;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  border-radius: 0.875rem;
+  background: var(--background);
+  transition: background 0.2s;
 }
 
 .travel-time-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .travel-time-mode h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .travel-time-mode label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    position: relative;
-    color: var(--text);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  position: relative;
+  color: var(--text);
 }
 
 .travel-time-mode input[type="number"] {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 0.875rem;
-    background: var(--surface);
-    color: var(--text);
-    font-size: 0.95rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .travel-time-mode input[type="number"]:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-light);
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
 }
 
 .check-in-time-mode {
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    border-radius: 0.875rem;
-    background: var(--background);
-    transition: background 0.2s;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  border-radius: 0.875rem;
+  background: var(--background);
+  transition: background 0.2s;
 }
 
 .check-in-time-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .check-in-time-mode h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .check-in-time-mode label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    position: relative;
-    color: var(--text);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  position: relative;
+  color: var(--text);
 }
 
 .check-in-time-mode input[type="number"] {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 0.875rem;
-    background: var(--surface);
-    color: var(--text);
-    font-size: 0.95rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .check-in-time-mode input[type="number"]:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-light);
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
 }
 
 .base-airport-mode {
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    border-radius: 0.875rem;
-    background: var(--background);
-    transition: background 0.2s;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  border-radius: 0.875rem;
+  background: var(--background);
+  transition: background 0.2s;
 }
 
 .base-airport-mode h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .base-airport-mode label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    position: relative;
-    color: var(--text);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  position: relative;
+  color: var(--text);
 }
 
 .base-airport-mode input[type="text"] {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 0.875rem;
-    background: var(--surface);
-    color: var(--text);
-    font-size: 0.95rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    text-transform: uppercase;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  text-transform: uppercase;
 }
 
 .base-airport-mode input[type="text"]:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-light);
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
 }
 
 .suggestions {
-    position: absolute;
-    width: 100%;
-    max-width: 310px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 0.875rem;
-    max-height: 150px;
-    overflow-y: auto;
-    z-index: 1000;
-    margin-top: 0.5rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    display: none;
+  position: absolute;
+  width: 100%;
+  max-width: 310px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  display: none;
 }
 
 .suggestions.active {
-    display: block;
+  display: block;
 }
 
 .suggestion-item {
-    padding: 0.75rem;
-    font-size: 0.95rem;
-    color: var(--text);
-    cursor: pointer;
-    transition: background 0.2s;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .suggestion-item:hover {
-    background: var(--primary-light);
+  background: var(--primary-light);
 }
 
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .modal.active {
-    display: flex;
-    opacity: 1;
+  display: flex;
+  opacity: 1;
 }
 
 .time-edit-control {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 1.5rem 0 0.2rem 0;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0 0.2rem 0;
+  width: 100%;
 }
 
 .time-btn {
-    width: 90px;
-    height: 50px;
-    border-radius: 0.875rem;
-    border: 2px solid var(--border);
-    background: transparent;
-    color: var(--icon-color);
-    font-size: 1.4rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
+  width: 90px;
+  height: 50px;
+  border-radius: 0.875rem;
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--icon-color);
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 }
 
 .time-btn:active {
-    width: 70px;
-    height: 40px;
-    border-color: var(--primary);
-    color: var(--primary);
-    background: var(--primary-light);
+  width: 70px;
+  height: 40px;
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
 }
 
 .modal-content input[type="time"] {
-    width: 120px;
-    padding: 0 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 0.875rem;
-    background: var(--surface);
-    color: var(--text);
-    font-size: 1.2rem;
-    text-align: center;
-    outline: none;
-    transition: border-color 0.2s;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    height: 50px;
-    line-height: 50px;
-    box-sizing: border-box;
+  width: 120px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.2rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  height: 50px;
+  line-height: 50px;
+  box-sizing: border-box;
 }
 
 .modal-content input[type="time"]:focus {
-    border-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .modal-content input[type="time"]::-webkit-inner-spin-button,
 .modal-content input[type="time"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .modal-content input[type="time"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 .reset-btn {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid var(--border);
-    border-radius: 0.875rem;
-    background: var(--surface);
-    color: var(--text);
-    font-size: 0.95rem;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
 }
 
 .reset-btn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
 }
 
 .modal-buttons {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-top: 0.1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.1rem;
 }
 
 .done-btn {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid var(--primary);
-    border-radius: 0.875rem;
-    background: var(--primary);
-    color: #fff;
-    font-size: 0.95rem;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--primary);
+  border-radius: 0.875rem;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
 }
 
 .done-btn:hover {
-    background: rgba(128, 128, 128, 0.9);
-    border-color: rgba(128, 128, 128, 0.9);
+  background: rgba(128, 128, 128, 0.9);
+  border-color: rgba(128, 128, 128, 0.9);
 }
 
 .flight-actions {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .create-duty-btn {
-    padding: 0.6rem 1rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 8px;
-    background-color: var(--primary);
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    margin-left: 0rem;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-left: 0rem;
 }
 
 .create-duty-btn:hover {
-    background-color: rgba(59, 130, 246, 0.8);
+  background-color: rgba(59, 130, 246, 0.8);
 }
 
 .create-duty-btn:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-    opacity: 0.6;
+  background-color: #aaa;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .duty-group {
-    border: 2px solid var(--success);
-    border-radius: 12px;
-    padding: 1rem;
-    margin: 1rem 0;
-    background: var(--surface);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+  border: 2px solid var(--success);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: var(--surface);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .duty-group.visible {
-    opacity: 1;
+  opacity: 1;
 }
 
 .flight-block {
-    margin: 0;
+  margin: 0;
 }
 
 .flight-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    font-family: 'Inter', system-ui, sans-serif;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
-    box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Inter', system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .flight-card .flight-column {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .flight-date-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    color: var(--secondary-text);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--secondary-text);
 }
 
 .flight-time-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--text);
 }
 
 .flight-time {
-    font-size: 1.2rem;
-    font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .iata-code {
-    font-weight: normal;
-    color: var(--secondary-text);
+  font-weight: normal;
+  color: var(--secondary-text);
 }
 
 .city {
-    text-align: right;
-    color: var(--text);
-    font-size: 1.05rem;
+  text-align: right;
+  color: var(--text);
+  font-size: 1.05rem;
 }
 
 .flight-icon {
-    text-align: center;
-    font-size: 1.2rem;
-    color: var(--primary);
-    margin: 0.25rem 0;
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin: 0.25rem 0;
 }
 
 .flight-info-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.95rem;
-    color: var(--text);
-    border-top: 1px dashed var(--border);
-    padding-top: 0.5rem;
-    margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: var(--text);
+  border-top: 1px dashed var(--border);
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
+/* Модальное окно редактирования */
 .edit-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
 }
 
 .edit-modal.active {
-    display: flex;
-    opacity: 1;
+  display: flex;
 }
 
 .edit-modal-content {
-    position: relative;
-    background: var(--surface);
-    padding: 1.5rem;
-    border-radius: 1.25rem;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background-color: var(--surface);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%; /* Адаптивная ширина */
+  max-width: 500px; /* Ограничение максимальной ширины */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow-y: auto; /* Позволяет прокрутку, если содержимое превышает высоту */
+  max-height: 80vh; /* Ограничение высоты относительно окна браузера */
 }
 
 .edit-modal-content h3 {
-    margin-top: 0;
-    font-size: 1.2rem;
-    color: var(--text);
-    text-align: center;
-    margin-bottom: 1rem;
+  margin-top: 0;
+  font-size: 1.5em;
+  color: var(--text);
+  text-align: center;
 }
 
 .edit-modal-content .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 15px 0;
 }
 
 .edit-modal-content input,
 .edit-modal-content select {
-    padding: 0.75rem;
-    font-size: 0.95rem;
-    border: 1px solid var(--border);
-    border-radius: 0.875rem;
-    background: var(--surface);
-    color: var(--text);
-    transition: border-color 0.2s;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--surface);
+  color: var(--text);
+  font-size: 1em;
+  width: 100%; /* Полная ширина внутри контейнера */
+  box-sizing: border-box; /* Учитывать padding и border в ширине */
 }
 
-.edit-modal-content input:focus,
-.edit-modal-content select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-light);
+.flight-number-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.flight-number-wrapper select,
+.flight-number-wrapper input {
+  flex: 1; /* Равномерное распределение ширины */
 }
 
 .edit-modal-content .buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .edit-modal-content button {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 0.875rem;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: all 0.2s;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  flex: 1;
 }
 
-.edit-modal-content .save-btn {
-    background: var(--success);
-    color: white;
+.delete-btn {
+  background-color: var(--danger);
+  color: white;
 }
 
-.edit-modal-content .save-btn:hover {
-    background: rgba(40, 167, 69, 0.9);
+.cancel-btn {
+  background-color: var(--secondary-text);
+  color: white;
 }
 
-.edit-modal-content .cancel-btn {
-    background: var(--danger);
-    color: white;
+.save-btn {
+  background-color: var(--success);
+  color: white;
 }
 
-.edit-modal-content .cancel-btn:hover {
-    background: rgba(220, 53, 69, 0.9);
+.edit-modal-content button:hover {
+  opacity: 0.9;
 }
 
-.edit-modal-content .delete-btn {
-    background: var(--danger);
-    color: white;
+/* Дополнительные стили для предотвращения переполнения */
+.edit-modal-content::-webkit-scrollbar {
+  width: 8px;
 }
 
-.edit-modal-content .delete-btn:hover {
-    background: rgba(220, 53, 69, 0.9);
+.edit-modal-content::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+.edit-modal-content::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 4px;
+}
+
+.edit-modal-content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text);
 }
 
 .add-another-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .add-another-modal.active {
-    display: flex;
-    opacity: 1;
+  display: flex;
+  opacity: 1;
 }
 
 .add-another-modal .modal-content {
-    text-align: center;
-    padding: 1.5rem;
-    max-width: 350px;
-    width: 90%;
+  text-align: center;
+  padding: 1.5rem;
+  max-width: 350px;
+  width: 90%;
 }
 
 .add-another-modal h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1.5rem;
 }
 
 .add-another-modal .buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .yes-btn, .no-btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 0.875rem;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.875rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .yes-btn {
-    background: var(--success);
-    color: white;
+  background: var(--success);
+  color: white;
 }
 
 .yes-btn:hover {
-    background: rgba(40, 167, 69, 0.9);
+  background: rgba(40, 167, 69, 0.9);
 }
 
 .no-btn {
-    background: var(--danger);
-    color: white;
+  background: var(--danger);
+  color: white;
 }
 
 .no-btn:hover {
-    background: rgba(220, 53, 69, 0.9);
+  background: rgba(220, 53, 69, 0.9);
 }
 
 @media (max-width: 480px) {
-    .duty-group {
-        border-width: 1.5px;
-        padding: 0.75rem;
-        margin: 0.75rem 0;
-    }
+  .duty-group {
+    border-width: 1.5px;
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+  }
 
-    .add-another-modal .modal-content {
-        padding: 1rem;
-        max-width: 300px;
-    }
+  .add-another-modal .modal-content {
+    padding: 1rem;
+    max-width: 300px;
+  }
 
-    .add-another-modal h3 {
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
-    }
+  .add-another-modal h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
 
-    .add-another-modal .buttons {
-        gap: 0.5rem;
-        flex-direction: column;
-    }
+  .add-another-modal .buttons {
+    gap: 0.5rem;
+    flex-direction: column;
+  }
 
-    .yes-btn, .no-btn {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-    }
+  .yes-btn, .no-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
 
-    body {
-        padding: 0.75rem;
-    }
+  body {
+    padding: 0.75rem;
+  }
 
-    .header {
-        padding: 0.5rem 0.1rem;
-        max-width: 250px;
-        margin: 0 auto;
-        margin-bottom: 0.7rem;
-    }
+  .header {
+    padding: 0.5rem 0.1rem;
+    max-width: 250px;
+    margin: 0 auto;
+    margin-bottom: 0.7rem;
+  }
 
-    .current-time {
-        font-size: 2rem;
-    }
+  .current-time {
+    font-size: 2rem;
+  }
 
-    .destination-label {
-        font-size: 0.8rem;
-        margin-top: 0.05rem;
-    }
+  .destination-label {
+    font-size: 0.8rem;
+    margin-top: 0.05rem;
+  }
 
-    .add-flight-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
+  .add-flight-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
 
-    .input-group {
-        padding: 0.75rem;
-    }
+  .input-group {
+    padding: 0.75rem;
+  }
 
-    .flight-inputs {
-        gap: 0.5rem;
-        width: 100%;
-        max-width: 100%;
-        padding: 0 0.5rem;
-        box-sizing: border-box;
-    }
+  .flight-inputs {
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+  }
 
-    .date-input {
-        padding: 0.5rem;
-        font-size: 1.05rem;
-        height: 40px;
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-    }
+  .date-input {
+    padding: 0.5rem;
+    font-size: 1.05rem;
+    height: 40px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
 
-    .flight-time-inputs {
-        gap: 0.3rem;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
+  .flight-time-inputs {
+    gap: 0.3rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
-    .flight-time-display {
-        padding: 0.5rem !important;
-        font-size: 1rem !important;
-        height: 40px !important;
-        width: 50% !important;
-        max-width: 50% !important;
-        box-sizing: border-box !important;
-        flex-shrink: 1 !important;
-    }
+  .flight-time-display {
+    padding: 0.5rem !important;
+    font-size: 1rem !important;
+    height: 40px !important;
+    width: 50% !important;
+    max-width: 50% !important;
+    box-sizing: border-box !important;
+    flex-shrink: 1 !important;
+  }
 
-    .flight-time-display.input-mode {
-        padding: 0 !important;
-        font-size: 1rem !important;
-        height: 40px !important;
-        width: 30% !important;
-        max-width: 150px !important;
-    }
+  .flight-time-display.input-mode {
+    padding: 0 !important;
+    font-size: 1rem !important;
+    height: 40px !important;
+    width: 30% !important;
+    max-width: 150px !important;
+  }
 
-    .airports {
-        gap: 0.75rem;
-    }
+  .airports {
+    gap: 0.75rem;
+  }
 
-    .airport {
-        padding: 0.5rem 0;
-        gap: 0.5rem;
-    }
+  .airport {
+    padding: 0.5rem 0;
+    gap: 0.5rem;
+  }
 
-    .airport-icon {
-        font-size: 1.5rem;
-    }
+  .airport-icon {
+    font-size: 1.5rem;
+  }
 
-    .airport-code {
-        font-size: 1rem;
-    }
+  .airport-code {
+    font-size: 1rem;
+  }
 
-    .airport-name {
-        font-size: 0.85rem;
-    }
+  .airport-name {
+    font-size: 0.85rem;
+  }
 
-    .flight-number-wrapper {
-        height: 40px;
-        width: 100%;
-        max-width: 130px;
-        flex-shrink: 1;
-    }
+  .flight-number-wrapper {
+    height: 40px;
+    width: 100%;
+    max-width: 130px;
+    flex-shrink: 1;
+  }
 
-    .flight-prefix {
-        padding: 0.3rem 0.2rem;
-        font-size: 1rem;
-        width: 3ch;
-        min-width: 3ch;
-        max-width: 3ch;
-    }
+  .flight-prefix {
+    padding: 0.3rem 0.2rem;
+    font-size: 1rem;
+    width: 3ch;
+    min-width: 3ch;
+    max-width: 3ch;
+  }
 
-    .flight-number {
-        padding: 0.3rem;
-        font-size: 1rem;
-    }
+  .flight-number {
+    padding: 0.3rem;
+    font-size: 1rem;
+  }
 
-    .modal-content select {
-        max-width: 200px;
-        min-width: 120px;
-        padding: 0.5rem;
-        font-size: 0.9rem;
-    }
+  .modal-content select {
+    max-width: 200px;
+    min-width: 120px;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
 
-    .time-edit-control {
-        gap: 0.3rem;
-        margin: 1rem 0 0.1rem 0;
-    }
+  .time-edit-control {
+    gap: 0.3rem;
+    margin: 1rem 0 0.1rem 0;
+  }
 
-    .time-btn {
-        width: 70px;
-        height: 40px;
-        font-size: 1.2rem;
-        border-radius: 0.875rem;
-    }
+  .time-btn {
+    width: 70px;
+    height: 40px;
+    font-size: 1.2rem;
+    border-radius: 0.875rem;
+  }
 
-    .modal-content input[type="time"] {
-        width: 100px;
-        font-size: 1.1rem;
-        border-radius: 0.875rem;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        height: 40px;
-        line-height: 40px;
-        padding: 0 0.75rem;
-        box-sizing: border-box;
-    }
+  .modal-content input[type="time"] {
+    width: 100px;
+    font-size: 1.1rem;
+    border-radius: 0.875rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 0.75rem;
+    box-sizing: border-box;
+  }
 
-    .modal-content input[type="time"]::-webkit-inner-spin-button,
-    .modal-content input[type="time"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+  .modal-content input[type="time"]::-webkit-inner-spin-button,
+  .modal-content input[type="time"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
-    .modal-content input[type="time"] {
-        -moz-appearance: textfield;
-    }
+  .modal-content input[type="time"] {
+    -moz-appearance: textfield;
+  }
 
-    .reset-btn {
-        padding: 0.6rem;
-        font-size: 0.9rem;
-        border-radius: 0.875rem;
-    }
+  .reset-btn {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    border-radius: 0.875rem;
+  }
 
-    .modal-buttons {
-        gap: 0.5rem;
-        margin-top: 0.05rem;
-    }
+  .modal-buttons {
+    gap: 0.5rem;
+    margin-top: 0.05rem;
+  }
 
-    .done-btn {
-        padding: 0.6rem;
-        font-size: 0.9rem;
-        border-radius: 0.875rem;
-    }
+  .done-btn {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    border-radius: 0.875rem;
+  }
 
-    .base-airport-mode {
-        padding: 0.5rem;
-    }
+  .base-airport-mode {
+    padding: 0.5rem;
+  }
 
-    .base-airport-header {
-        gap: 0.4rem;
-        margin-bottom: 0.75rem;
-    }
+  .base-airport-header {
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+  }
 
-    .base-airport-mode h3 {
-        font-size: 1rem;
-    }
+  .base-airport-mode h3 {
+    font-size: 1rem;
+  }
 
-    .base-airport-mode label {
-        font-size: 0.9rem;
-    }
+  .base-airport-mode label {
+    font-size: 0.9rem;
+  }
 
-    .base-airport-mode input[type="text"] {
-        padding: 0.5rem;
-        font-size: 0.9rem;
-    }
+  .base-airport-mode input[type="text"] {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
 
-    .suggestions {
-        max-width: 100%;
-        max-height: 120px;
-    }
+  .suggestions {
+    max-width: 100%;
+    max-height: 120px;
+  }
 
-    .suggestion-item {
-        padding: 0.5rem;
-        font-size: 0.9rem;
-    }
+  .suggestion-item {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
