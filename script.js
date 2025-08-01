@@ -29,10 +29,6 @@ function fetchFlightInfo(flightNumber, date) {
 
     fetch(proxyUrl, {
       method: 'GET', // Явно указываем метод
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
     })
     .then(response => {
       if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
